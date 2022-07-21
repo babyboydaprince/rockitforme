@@ -1,2 +1,2 @@
 # rockitforme
-building a skyscraper
+Offensive security framework for pentesters made with python

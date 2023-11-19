@@ -2,9 +2,7 @@ package initialize
 
 import (
 	"fmt"
-	_ "fmt"
 	"strings"
-	_ "strings"
 
 	"github.com/AlecAivazis/survey/v2"
 )

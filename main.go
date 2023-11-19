@@ -1,13 +1,11 @@
 package main
 
 import (
-	_ "rockitforme/common"
+	"rockitforme/banner"
 	"rockitforme/initialize"
 )
 
 func main() {
-
-	initialize.Banner()
+	banner.PrintBanner()
 	initialize.StartMenu()
-
 }

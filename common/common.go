@@ -1,8 +1,6 @@
 package common
 
-import (
-	"github.com/AlecAivazis/survey/v2"
-)
+import "github.com/AlecAivazis/survey/v2"
 
 func Checkboxes(label string, opts []string) []string {
 	var res []string

@@ -12,8 +12,8 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"rockitforme/banner"
 	"rockitforme/common"
-	"rockitforme/initialize"
 	"runtime"
 	"strings"
 	"time"
@@ -162,7 +162,7 @@ func changeMAC(interfaceName, newMAC string) error {
 }
 
 func findInterfaces() {
-	initialize.Banner()
+	banner.PrintBanner()
 
 	t := table.NewWriter()
 
@@ -184,8 +184,8 @@ func findInterfaces() {
 			t.AppendRow(table.Row{
 				i + 1, iface.Name, iface.Index, iface.MTU, iface.HardwareAddr})
 
-			fmt.Print("\033[H\033[2J")
-			initialize.Banner() // Clear the console
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.PrintBanner()
 			fmt.Println(t.Render())
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -203,8 +203,8 @@ func findInterfaces() {
 			t.AppendRow(table.Row{
 				i + 1, device.Name, device.Description})
 
-			fmt.Print("\033[H\033[2J")
-			initialize.Banner() // Clear the console
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.PrintBanner()
 			fmt.Println(t.Render())
 			time.Sleep(500 * time.Millisecond)
 		}

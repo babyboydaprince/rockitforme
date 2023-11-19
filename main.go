@@ -1,8 +1,8 @@
 package main
 
 import (
+	_ "rockitforme/common"
 	"rockitforme/initialize"
-	_ "rockitforme/initialize"
 )
 
 func main() {

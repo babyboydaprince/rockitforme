@@ -2,7 +2,10 @@ module rockitforme
 
 go 1.21
 
-require github.com/nexidian/gocliselect v1.0.0
+require (
+	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
+	github.com/nexidian/gocliselect v1.0.0
+)
 
 require (
 	github.com/buger/goterm v1.0.3 // indirect

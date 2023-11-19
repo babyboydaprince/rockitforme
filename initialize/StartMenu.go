@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/common-nighthawk/go-figure"
 	"github.com/nexidian/gocliselect"
 )
 

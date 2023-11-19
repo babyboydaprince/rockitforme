@@ -1,11 +1,10 @@
 package rockitforme
 
-import (
-	"github.com/babyboydaprince/rockitforme/initialize"
-)
+import "rockitforme/initialize"
 
 func main() {
-	for {
-		initialize.Banner()
-	}
+
+	initialize.Banner()
+	initialize.Main()
+
 }

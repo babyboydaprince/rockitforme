@@ -23,7 +23,7 @@ func Checkboxes(label string, opts []string) []string {
 
 func StartMenu() {
 	answers := Checkboxes(
-		"Which are your favourite programming languages?",
+		"\nWhich are your favourite programming languages?",
 		[]string{
 			"C",
 			"Python",

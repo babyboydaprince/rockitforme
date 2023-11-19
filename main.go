@@ -1,10 +1,13 @@
 package rockitforme
 
-import "rockitforme/initialize"
+import (
+	"rockitforme/initialize"
+	_ "rockitforme/initialize"
+)
 
 func main() {
 
 	initialize.Banner()
-	initialize.Main()
+	initialize.StartMenu()
 
 }

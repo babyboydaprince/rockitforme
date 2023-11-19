@@ -2,30 +2,53 @@ package initialize
 
 import (
 	"fmt"
-	"github.com/common-nighthawk/go-figure"
-	"github.com/nexidian/gocliselect"
+	_ "fmt"
+	"strings"
+	_ "strings"
+
+	"github.com/AlecAivazis/survey/v2"
 )
 
-func Banner() {
-	asciiLogo1 := figure.NewColorFigure("Go change", "Bloody", "red", true)
-	asciiLogo2 := figure.NewColorFigure("my mac!", "Bloody", "blue", true)
+func Checkboxes(label string, opts []string) []string {
+	var res []string
+	prompt := &survey.MultiSelect{
+		Message: label,
+		Options: opts,
+	}
+	err := survey.AskOne(prompt, &res)
+	if err != nil {
+		return nil
+	}
 
-	asciiLogo1.Print()
-	asciiLogo2.Print()
+	return res
 }
 
-func Main() {
-
-	menu := gocliselect.NewMenu("Chose a colour")
-
-	menu.AddItem("Red", "red")
-	menu.AddItem("Blue", "blue")
-	menu.AddItem("Green", "green")
-	menu.AddItem("Yellow", "yellow")
-	menu.AddItem("Cyan", "cyan")
-
-	choice := menu.Display()
-
-	fmt.Printf("Choice: %s\n", choice)
-
+func StartMenu() {
+	answers := Checkboxes(
+		"Which are your favourite programming languages?",
+		[]string{
+			"C",
+			"Python",
+			"Java",
+			"C++",
+			"C#",
+			"Visual Basic",
+			"JavaScript",
+			"PHP",
+			"Assembly Language",
+			"SQL",
+			"Groovy",
+			"Classic Visual Basic",
+			"Fortran",
+			"R",
+			"Ruby",
+			"Swift",
+			"MATLAB",
+			"Go",
+			"Prolog",
+			"Perl",
+		},
+	)
+	s := strings.Join(answers, ", ")
+	fmt.Println("Oh, I see! You like", s)
 }

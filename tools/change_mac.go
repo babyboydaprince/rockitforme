@@ -51,6 +51,7 @@ func restoreOriginalMAC(interfaceName, originalMAC string) error {
 }
 
 func winRestoreOriginalMAC() {
+
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		log.Fatal(err)
@@ -213,26 +214,27 @@ func findInterfaces() {
 }
 
 func GoChangeMyMac() {
-	for {
-		answers := common.Checkboxes(
-			"\nChoose an option for changing MAC Address:",
-			[]string{
-				"List interfaces",
-				"Restore original MAC for Windows",
-				"Run with Windows compatibility",
-				"Restore original MAC",
-				"Set random MAC",
-				"Set MAC manually",
-				"Exit",
-			},
-		)
 
-		switch answers[0] { // Access the first element of the slice
+	fmt.Print("\033[H\033[2J") // Clear the console
+	banner.PrintBanner()
+
+	for {
+		menuChoice := common.SingleSelect("\nChoose an operation:\n", []string{
+			"List interfaces",
+			"Restore original MAC for Windows",
+			"Change MAC Windows compatible",
+			"Restore original MAC",
+			"Set random MAC",
+			"Set MAC manually",
+			"Exit",
+		})
+
+		switch menuChoice {
 		case "List interfaces":
 			findInterfaces()
 		case "Restore original MAC for Windows":
 			winRestoreOriginalMAC()
-		case "Run with Windows compatibility":
+		case "Change MAC Windows compatible":
 			interfaceName := askForInterface()
 			newMAC := askForNewMAC()
 			err := winChangeMAC(interfaceName, newMAC)
@@ -256,6 +258,7 @@ func GoChangeMyMac() {
 			handleError(err)
 			fmt.Printf("\nMAC address for %s changed to %s\n", interfaceName, manualMAC)
 		case "Exit":
+			fmt.Println("\nExiting...")
 			os.Exit(0)
 		}
 	}
@@ -264,7 +267,7 @@ func GoChangeMyMac() {
 func askForInterface() string {
 	var interfaceName string
 	prompt := &survey.Input{
-		Message: "Enter the interface name:",
+		Message: "\nEnter the interface name:",
 	}
 	err := survey.AskOne(prompt, &interfaceName, survey.WithValidator(survey.Required))
 	handleError(err)

@@ -4,9 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/signal"
 	"rockitforme/banner"
 	"rockitforme/common"
 	"rockitforme/tools"
+	"sync"
+	"syscall"
+	"time"
 )
 
 func StartMenu() {
@@ -85,7 +89,52 @@ MainMenuLoop:
 				fmt.Print("\033[H\033[2J") // Clear the console
 				banner.PrintBanner()
 
-				fmt.Println("\nSpoofing...")
+				scanner := bufio.NewScanner(os.Stdin)
+
+				fmt.Print("\nSet TARGET IP to spoof: ")
+
+				scanner.Scan()
+
+				target := scanner.Text()
+
+				fmt.Print("\nNow set the GATEWAY IP to spoof: ")
+
+				scanner.Scan()
+
+				gateway := scanner.Text()
+
+				// Channel to receive Ctrl+C signal
+				sigChan := make(chan os.Signal, 1)
+				signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+
+				// Channel to notify the ARP spoofing goroutine to stop
+				stopChan := make(chan struct{})
+
+				// Wait group for synchronization
+				var wg sync.WaitGroup
+
+				// Start ARP spoofing command in the background
+				wg.Add(1)
+				go func() {
+					defer wg.Done()
+					tools.ArpSpoof(target, gateway, stopChan)
+				}()
+
+				// Wait for Ctrl+C signal or ARP spoofing completion
+				select {
+				case <-sigChan:
+					// If Ctrl+C is pressed, interrupt ARP spoofing
+					fmt.Println("\nARP Spoofing interrupted. Returning to the main menu.")
+					stopChan <- struct{}{} // Notify the ARP spoofing to stop
+				case <-time.After(5 * time.Second): // Adjust the duration based on your needs
+					// After a certain duration, assume the ARP spoofing command has completed
+					fmt.Println("\nARP Spoofing completed!")
+					time.Sleep(2 * time.Second)
+
+				}
+
+				// Wait for the ARP spoofing goroutine to finish
+				wg.Wait()
 
 			case "Go back":
 				fmt.Print("\033[H\033[2J") // Clear the console
@@ -134,5 +183,6 @@ MainMenuLoop:
 			os.Exit(0)
 
 		}
+
 	}
 }

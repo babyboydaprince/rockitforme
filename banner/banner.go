@@ -2,12 +2,13 @@ package banner
 
 import (
 	"fmt"
+
 	"github.com/common-nighthawk/go-figure"
 )
 
 func PrintBanner() {
-	asciiLogo1 := figure.NewColorFigure("Rock it", "larry3d", "red", true)
-	asciiLogo2 := figure.NewColorFigure("For me!", "larry3d", "blue", true)
+	asciiLogo1 := figure.NewColorFigure("Rock it", "elite", "red", true)
+	asciiLogo2 := figure.NewColorFigure("For me !", "elite", "blue", true)
 
 	fmt.Print("\033[H\033[2J")
 

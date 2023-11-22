@@ -1,26 +1,54 @@
+// common/common.go
+
 package common
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"rockitforme/banner"
+	"strconv"
 )
 
-func SingleSelect(label string, opts []string) string {
-	fmt.Println(label)
-	for i, opt := range opts {
-		fmt.Printf("%d. %s\n", i+1, opt)
+// SingleSelect displays a menu and prompts the user to select an option.
+// It returns the selected option or an empty string if the user presses Enter without choosing.
+func SingleSelect(prompt string, options []string) string {
+
+	fmt.Println(prompt)
+
+	for i, option := range options {
+		fmt.Printf("%d. %s\n", i+1, option)
 	}
 
-	var choice int
-	fmt.Print("\nEnter your choice: ")
-	_, err := fmt.Scanln(&choice)
-	if err != nil {
-		panic(err)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Print("\nChoose the tool set to work with: ")
+
+	scanner.Scan()
+
+	input := scanner.Text()
+
+	if input == "" {
+		// Handle the case where the user presses Enter without choosing anything
+		fmt.Print("\033[H\033[2J") // Clear the console
+		banner.PrintBanner()
+
+		return ""
 	}
 
-	if choice < 1 || choice > len(opts) {
-		fmt.Println("\nInvalid choice. Please enter a valid number.")
-		return SingleSelect(label, opts)
+	// Convert the input to an integer index
+	choiceIndex, err := strconv.Atoi(input)
+	if err != nil || choiceIndex < 1 || choiceIndex > len(options) {
+
+		// Handle invalid input (not a number or out of range)
+		fmt.Print("\033[H\033[2J") // Clear the console
+		banner.PrintBanner()
+
+		return ""
 	}
 
-	return opts[choice-1]
+	// Adjust the index since arrays are zero-based
+	choiceIndex--
+
+	return options[choiceIndex]
 }

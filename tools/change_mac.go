@@ -2,11 +2,6 @@ package tools
 
 import (
 	"fmt"
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
-	"github.com/google/gopacket/pcap"
-	"github.com/jedib0t/go-pretty/v6/table"
 	"log"
 	"math/rand"
 	"net"
@@ -18,9 +13,11 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/AlecAivazis/survey/v2"
-	_ "github.com/google/gopacket/pcap"
-	_ "github.com/jedib0t/go-pretty/v6/table"
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
+	"github.com/google/gopacket/pcap"
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 func getOriginalMAC(interfaceName string) (string, error) {
@@ -64,7 +61,6 @@ func winRestoreOriginalMAC() {
 		log.Fatal("unable to retrieve original MAC address")
 	}
 
-	return
 }
 
 func setRandomMAC(interfaceName string) error {
@@ -207,7 +203,7 @@ func findInterfaces() {
 			fmt.Print("\033[H\033[2J") // Clear the console
 			banner.PrintBanner()
 			fmt.Println(t.Render())
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(50 * time.Millisecond)
 		}
 
 	}
@@ -218,27 +214,33 @@ func GoChangeMyMac() {
 	fmt.Print("\033[H\033[2J") // Clear the console
 	banner.PrintBanner()
 
+MacChangerLoop:
 	for {
-		menuChoice := common.SingleSelect("\nChoose an operation:\n", []string{
+		menuChoice := common.SingleSelect("\n       ----MAC CHANGER----\n", []string{
 			"List interfaces",
 			"Restore original MAC for Windows",
 			"Change MAC Windows compatible",
 			"Restore original MAC",
 			"Set random MAC",
 			"Set MAC manually",
+			"Go back to main menu",
 			"Exit",
 		})
 
 		switch menuChoice {
+
 		case "List interfaces":
 			findInterfaces()
+
 		case "Restore original MAC for Windows":
 			winRestoreOriginalMAC()
+
 		case "Change MAC Windows compatible":
 			interfaceName := askForInterface()
 			newMAC := askForNewMAC()
 			err := winChangeMAC(interfaceName, newMAC)
 			handleError(err)
+
 		case "Restore original MAC":
 			interfaceToRestore := askForInterface()
 			originalMAC, err := getOriginalMAC(interfaceToRestore)
@@ -246,17 +248,26 @@ func GoChangeMyMac() {
 			err = restoreOriginalMAC(interfaceToRestore, originalMAC)
 			handleError(err)
 			fmt.Printf("\nOriginal MAC address for %s restored: %s\n", interfaceToRestore, originalMAC)
+
 		case "Set random MAC":
 			interfaceName := askForInterface()
 			err := setRandomMAC(interfaceName)
 			handleError(err)
 			fmt.Printf("\nRandomized MAC address set for %s\n", interfaceName)
+
 		case "Set MAC manually":
 			interfaceName := askForInterface()
 			manualMAC := askForManualMAC()
 			err := changeMAC(interfaceName, manualMAC)
 			handleError(err)
 			fmt.Printf("\nMAC address for %s changed to %s\n", interfaceName, manualMAC)
+
+		case "Go back to main menu":
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.PrintBanner()
+
+			break MacChangerLoop
+
 		case "Exit":
 			fmt.Println("\nExiting...")
 			os.Exit(0)

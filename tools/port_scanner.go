@@ -25,6 +25,7 @@ func spinner(done chan struct{}, wg *sync.WaitGroup) {
 		default:
 			fmt.Print("\033[H\033[2J") // Clear the console
 			banner.PrintBanner()
+			fmt.Print("\n\n")
 			fmt.Printf("Scanning... %s\r", spinChars[i])
 			i = (i + 1) % len(spinChars)
 			time.Sleep(100 * time.Millisecond)

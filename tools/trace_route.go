@@ -25,6 +25,7 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 		default:
 			fmt.Print("\033[H\033[2J") // Clear the console
 			banner.PrintBanner()
+			fmt.Print("\n\n")
 			fmt.Printf("Tracing Route... %s\r", spinChars[i])
 			i = (i + 1) % len(spinChars)
 			time.Sleep(100 * time.Millisecond)
@@ -34,6 +35,7 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 
 // Trace route scan using nmap
 func TraceRoute(host string) {
+
 	cmd := exec.Command("nmap", host, "--traceroute")
 
 	// Channel and wait group for synchronization
@@ -53,6 +55,7 @@ func TraceRoute(host string) {
 	if err != nil {
 		// If there was any error, print it here
 		fmt.Println("\n\nCould not run command:", err)
+		fmt.Print("\nMust be run as root.\n\n")
 		return
 	}
 

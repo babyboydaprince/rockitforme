@@ -1,7 +1,9 @@
 package tools
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"rockitforme/banner"
 	"strings"
@@ -24,9 +26,9 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 			return
 		default:
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			banner.BannerTraceRoute()
 			fmt.Print("\n\n")
-			fmt.Printf("Tracing Route... %s\r", spinChars[i])
+			fmt.Printf("        Tracing Route... %s\r", spinChars[i])
 			i = (i + 1) % len(spinChars)
 			time.Sleep(100 * time.Millisecond)
 		}
@@ -34,7 +36,64 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 }
 
 // Trace route scan using nmap
-func TraceRoute(host string) {
+func TraceRoute() {
+
+	fmt.Print("\033[H\033[2J") // Clear the console
+	banner.BannerTraceRoute()
+
+	fmt.Print("\n ----TO WALK YOU THE PATH----\n")
+
+	chekTraceInput()
+
+}
+
+func chekTraceInput() {
+
+CheckInputLoop:
+	for {
+
+		scanner := bufio.NewScanner(os.Stdin)
+
+		fmt.Print("\n\nInsert URL or IP ADDRESS to trace the route \n\nor type BACK to return to menu:  ")
+
+		scanner.Scan()
+
+		input := scanner.Text()
+
+		switch strings.ToLower(input) {
+
+		case "":
+			fmt.Print("\nNot an option...")
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerTraceRoute()
+
+			goto CheckInputLoop
+
+		case "back":
+			fmt.Print("\nGoing back...")
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.PrintBanner()
+
+			break CheckInputLoop
+
+		default:
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerTraceRoute()
+
+			nmapTraceScan(input)
+
+			break CheckInputLoop
+		}
+
+	}
+}
+
+func nmapTraceScan(host string) {
 
 	cmd := exec.Command("nmap", host, "--traceroute")
 
@@ -61,7 +120,7 @@ func TraceRoute(host string) {
 
 	// Clear the console and print the banner
 	fmt.Print("\033[H\033[2J")
-	banner.PrintBanner()
+	banner.BannerTraceRoute()
 
 	// Create a new table
 	t := table.NewWriter()
@@ -81,4 +140,35 @@ func TraceRoute(host string) {
 
 	// Optional: Sleep for a short duration to make the output visible before the next iteration
 	time.Sleep(1 * time.Second)
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+	// Prompt the user to try another scan or go back to the Net Tools menu
+	fmt.Print("\n\nDo you want to perform another scan? (Y/N): ")
+
+	scanner.Scan()
+
+	response := scanner.Text()
+
+	switch strings.ToLower(response) {
+
+	case "y":
+		TraceRoute()
+
+	case "n":
+		// Go back to the Net Tools menu
+		fmt.Print("\033[H\033[2J")
+		banner.PrintBanner()
+
+		return
+
+	default:
+		fmt.Print("\nGoing back...")
+		time.Sleep(2 * time.Second)
+
+		fmt.Print("\033[H\033[2J") // Clear the console
+		banner.PrintBanner()
+
+		return
+	}
 }

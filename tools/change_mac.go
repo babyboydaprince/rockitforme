@@ -159,7 +159,7 @@ func changeMAC(interfaceName, newMAC string) error {
 }
 
 func findInterfaces() {
-	banner.PrintBanner()
+	banner.BannerMacChanger()
 
 	t := table.NewWriter()
 
@@ -182,7 +182,7 @@ func findInterfaces() {
 				i + 1, iface.Name, iface.Index, iface.MTU, iface.HardwareAddr})
 
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			banner.BannerMacChanger()
 			fmt.Println(t.Render())
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -201,7 +201,7 @@ func findInterfaces() {
 				i + 1, device.Name, device.Description})
 
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			banner.BannerMacChanger()
 			fmt.Println(t.Render())
 			time.Sleep(50 * time.Millisecond)
 		}
@@ -212,11 +212,11 @@ func findInterfaces() {
 func GoChangeMyMac() {
 
 	fmt.Print("\033[H\033[2J") // Clear the console
-	banner.PrintBanner()
+	banner.BannerMacChanger()
 
 MacChangerLoop:
 	for {
-		menuChoice := common.SingleSelect("\n       ----MAC CHANGER----\n", []string{
+		menuChoice := common.SingleSelect("\n     ----TO SHARPEN THE AXE----\n", []string{
 			"List interfaces",
 			"Restore original MAC for Windows",
 			"Change MAC Windows compatible",

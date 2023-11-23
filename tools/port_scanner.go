@@ -1,7 +1,9 @@
 package tools
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"os/exec"
 	"rockitforme/banner"
 	"strings"
@@ -24,9 +26,9 @@ func spinner(done chan struct{}, wg *sync.WaitGroup) {
 			return
 		default:
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			banner.BannerPortScanner()
 			fmt.Print("\n\n")
-			fmt.Printf("Scanning... %s\r", spinChars[i])
+			fmt.Printf("              Scanning... %s\r", spinChars[i])
 			i = (i + 1) % len(spinChars)
 			time.Sleep(100 * time.Millisecond)
 		}
@@ -34,7 +36,64 @@ func spinner(done chan struct{}, wg *sync.WaitGroup) {
 }
 
 // PortScan performs a port scan using nmap
-func PortScan(host string) {
+func PortScan() {
+
+	fmt.Print("\033[H\033[2J") // Clear the console
+	banner.BannerPortScanner()
+
+	fmt.Print("\n         ----TO SNEAK IN----\n")
+
+	chekInput()
+
+}
+
+func chekInput() {
+
+CheckInputLoop:
+	for {
+
+		scanner := bufio.NewScanner(os.Stdin)
+
+		fmt.Print("\n\nInsert URL or IP ADDRESS to scan \n\nor type BACK to return to menu:  ")
+
+		scanner.Scan()
+
+		host := scanner.Text()
+
+		switch strings.ToLower(host) {
+
+		case "":
+			fmt.Print("\nNot an option...")
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerPortScanner()
+
+			goto CheckInputLoop
+
+		case "back":
+			fmt.Print("\nGoing back...")
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.PrintBanner()
+
+			break CheckInputLoop
+
+		default:
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerPortScanner()
+
+			nmapPortScan(host)
+
+			break CheckInputLoop
+		}
+
+	}
+}
+
+func nmapPortScan(host string) {
 	cmd := exec.Command("nmap", host)
 
 	// Channel and wait group for synchronization
@@ -52,6 +111,7 @@ func PortScan(host string) {
 	wg.Wait()
 
 	if err != nil {
+
 		// If there was any error, print it here
 		fmt.Println("\n\nCould not run command:", err)
 		return
@@ -59,7 +119,9 @@ func PortScan(host string) {
 
 	// Clear the console and print the banner
 	fmt.Print("\033[H\033[2J")
-	banner.PrintBanner()
+	banner.BannerPortScanner()
+
+	fmt.Print("\n")
 
 	// Create a new table
 	t := table.NewWriter()
@@ -79,4 +141,35 @@ func PortScan(host string) {
 
 	// Optional: Sleep for a short duration to make the output visible before the next iteration
 	time.Sleep(1 * time.Second)
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+	// Prompt the user to try another scan or go back to the Net Tools menu
+	fmt.Print("\n\nDo you want to perform another scan? (Y/N): ")
+
+	scanner.Scan()
+
+	response := scanner.Text()
+
+	switch strings.ToLower(response) {
+
+	case "y":
+		PortScan()
+
+	case "n":
+		// Go back to the Net Tools menu
+		fmt.Print("\033[H\033[2J")
+		banner.PrintBanner()
+
+		return
+
+	default:
+		fmt.Print("\nGoing back...")
+		time.Sleep(2 * time.Second)
+
+		fmt.Print("\033[H\033[2J") // Clear the console
+		banner.PrintBanner()
+
+		return
+	}
 }

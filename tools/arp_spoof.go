@@ -1,6 +1,6 @@
 package tools
 
-// 192.168.0.162   -------- 192.160.0.1
+
 import (
 	"bufio"
 	"fmt"

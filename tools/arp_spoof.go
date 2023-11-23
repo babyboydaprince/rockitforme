@@ -1,109 +1,142 @@
 package tools
 
+// 192.168.0.162   -------- 192.160.0.1
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
 	"os/signal"
 	"rockitforme/banner"
-	"sync"
-	"syscall"
+	"strings"
 	"time"
 )
 
-func ArpSpoof(target string, gateway string, stopChan <-chan struct{}) {
+func ArpSpoof(target string, gateway string) {
+
 	fmt.Print("\033[H\033[2J") // Clear the console
-	banner.PrintBanner()
+	banner.BannerArpSpoof()
+
+	fmt.Print("\n    ----TO KEEP WATCH---\n")
+
+	CheckIPForward()
 
 	fmt.Printf("\nARP Spoofing in progress for Target: %s, Gateway: %s\n", target, gateway)
 	fmt.Print("\nPress Ctrl+C to stop and return to the main menu.\n\n")
 
-	// Channel to receive Ctrl+C signal
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	cmd := exec.Command("arpspoof", target, "-t", gateway)
 
-	// Channel to notify the ARP spoofing goroutine to stop
-	internalStopChan := make(chan struct{})
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	// Wait group for synchronization
-	var wg sync.WaitGroup
-
-	// Start ARP spoofing command in the background
-	wg.Add(1)
+	// Start the command in a goroutine
 	go func() {
-		defer wg.Done()
-		cmd := exec.Command("arpspoof", target, "-t", gateway)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Start()
-		<-internalStopChan // Wait for internal stop signal
-		cmd.Process.Kill() // Terminate the ARP spoofing command
+		if err := cmd.Start(); err != nil {
+			fmt.Println("\n\nError starting arpspoof:", err)
+			return
+		}
+		// Wait for the command to finish
+		cmd.Wait()
 	}()
 
-	// Wait for Ctrl+C signal or ARP spoofing completion
-	select {
-	case <-sigChan:
-		// If Ctrl+C is pressed, interrupt ARP spoofing
-		fmt.Println("\nARP Spoofing interrupted. Returning to the main menu.")
-		internalStopChan <- struct{}{} // Notify the internal stop channel
-	case <-stopChan:
-		// If stop signal received, stop ARP spoofing
-		fmt.Println("\nStop signal received. Returning to the main menu.")
-		internalStopChan <- struct{}{} // Notify the internal stop channel
-	case <-time.After(5 * time.Second): // Adjust the duration based on your needs
-		// After a certain duration, assume the ARP spoofing command has completed
-		fmt.Println("\nARP Spoofing completed (for demonstration purposes).")
+	// Listen for Ctrl+C signal
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, os.Interrupt)
+
+	// Wait for the termination signal
+	<-sigCh
+
+	// Handle the termination gracefully
+	fmt.Println("\n\nStopping ARP Spoofing...")
+	if err := cmd.Process.Kill(); err != nil {
+		fmt.Println("\n\nError stopping arpspoof:", err)
 	}
 
-	// Wait for the ARP spoofing goroutine to finish
-	wg.Wait()
+	// Wait for a brief moment to allow the module to finish
+	time.Sleep(2 * time.Second)
+
+	// Clear the console and go back to the main menu
+	fmt.Print("\033[H\033[2J") // Clear the console
+	banner.PrintBanner()
 }
 
-func CheckIPForward(setIP string) {
+func CheckIPForward() {
 
-	if setIP == "Y" || setIP == "y" {
+CheckIPForwardLoop:
 
-		cat := exec.Command("cat", "/proc/sys/net/ipv4/ip_forward")
+	for {
 
-		cat_out, catErr := cat.Output()
+		scanner := bufio.NewScanner(os.Stdin)
 
-		if catErr != nil {
-			// If there was any error, print it here
-			fmt.Println("\n\nCould not run command:", catErr)
-			fmt.Print("\nMust be run as root.\n\n")
-			return
-		}
+		fmt.Print("\n\nNeed to configure IP FORWARDING? (Y/N)\n\nor type BACK to return to menu: ")
 
-		result_cat := string(cat_out)
+		scanner.Scan()
 
-		if result_cat == "0" {
+		choiceIPFWD := scanner.Text()
 
-			fmt.Print("\nSetting IP FORWARD to 1")
+		switch strings.ToLower(choiceIPFWD) {
+
+		case "y":
+			ipForwarder(choiceIPFWD)
+			break CheckIPForwardLoop
+
+		case "n":
+			break CheckIPForwardLoop
+
+		case "back":
+			break CheckIPForwardLoop
+
+		default:
+			fmt.Print("\nNot an option...")
 			time.Sleep(2 * time.Second)
 
-			set := exec.Command("echo", "1", ">", "/proc/sys/net/ipv4/ip_forward")
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerArpSpoof()
 
-			set.Output()
-
-			result_cat1 := string(cat_out)
-
-			if result_cat1 == "1" {
-
-				fmt.Print("\nIP FORWARD 1 SUCCESSFULLY SET!")
-				time.Sleep(2 * time.Second)
-
-			}
-
-		} else if result_cat == "1" {
-
-			fmt.Print("\nIP FORWARD ALREADY SET TO 1.")
-			time.Sleep(2 * time.Second)
-			return
+			goto CheckIPForwardLoop
 		}
 
-	} else if setIP == "N" || setIP == "n" {
+	}
 
+}
+
+func ipForwarder(choice string) {
+
+	cat := exec.Command("cat", "/proc/sys/net/ipv4/ip_forward")
+
+	cat_out, catErr := cat.Output()
+
+	if catErr != nil {
+		// If there was any error, print it here
+		fmt.Println("\n\nCould not run command:", catErr)
+		fmt.Print("\nMust be run as root.\n\n")
 		return
 	}
 
+	result_cat := string(cat_out)
+
+	if result_cat == "0" {
+
+		fmt.Print("\nSetting IP FORWARD to 1")
+		time.Sleep(2 * time.Second)
+
+		set := exec.Command("echo", "1", ">", "/proc/sys/net/ipv4/ip_forward")
+
+		set.Output()
+
+		result_cat1 := string(cat_out)
+
+		if result_cat1 == "1" {
+
+			fmt.Print("\nIP FORWARD 1 SUCCESSFULLY SET!")
+			time.Sleep(2 * time.Second)
+
+		}
+
+	} else if result_cat == "1" {
+
+		fmt.Print("\nIP FORWARD ALREADY SET TO 1.")
+		time.Sleep(2 * time.Second)
+		return
+	}
 }

@@ -20,6 +20,13 @@ go run main.go
 
 - Golang 1.20+
 
+### 📋 Compatibility & Considerations
+
+- Currently ROCK IT FOR ME is mostly compatible with linux systems;
+- Rooted android devices perform really well, speacially with NET HUNTER installed;
+- Some tools are able to run on Windows systems already;
+
+
 ### 🔧 Installation
 
 ```
@@ -50,11 +57,11 @@ Respect other people's privacy.
 
 ## 📌 Comming soon
 
-- Windows interface enabler and disabler complete functionality;
+- Windows full compatibility
+- Windows interface enabler and disabler complete functionality for MAC CHANGER;
 - Wireless pentesting tools;
 - Web pentesting tools;
 - SDR tools;
-- Network analysis;
 - And much more...
 
 ---

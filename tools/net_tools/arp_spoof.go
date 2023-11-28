@@ -1,5 +1,4 @@
-package tools
-
+package net_tools
 
 import (
 	"bufio"
@@ -29,7 +28,6 @@ func ArpSpoof(target string, gateway string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Start the command in a goroutine
 	go func() {
 		if err := cmd.Start(); err != nil {
 			fmt.Println("\n\nError starting arpspoof:", err)
@@ -52,11 +50,9 @@ func ArpSpoof(target string, gateway string) {
 		fmt.Println("\n\nError stopping arpspoof:", err)
 	}
 
-	// Wait for a brief moment to allow the module to finish
 	time.Sleep(2 * time.Second)
 
-	// Clear the console and go back to the main menu
-	fmt.Print("\033[H\033[2J") // Clear the console
+	fmt.Print("\033[H\033[2J")
 	banner.PrintBanner()
 }
 
@@ -107,7 +103,7 @@ func ipForwarder(choice string) {
 	cat_out, catErr := cat.Output()
 
 	if catErr != nil {
-		// If there was any error, print it here
+
 		fmt.Println("\n\nCould not run command:", catErr)
 		fmt.Print("\nMust be run as root.\n\n")
 		return

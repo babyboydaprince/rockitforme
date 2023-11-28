@@ -1,4 +1,4 @@
-package tools
+package net_tools
 
 import (
 	"bufio"
@@ -13,8 +13,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-// spinner function to show a loading spinner
-func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
+func spinner(done chan struct{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	spinChars := []string{"|", "/", "-", "\\"}
@@ -26,48 +25,47 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 			return
 		default:
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.BannerTraceRoute()
+			banner.BannerPortScanner()
 			fmt.Print("\n\n")
-			fmt.Printf("        Tracing Route... %s\r", spinChars[i])
+			fmt.Printf("              Scanning... %s\r", spinChars[i])
 			i = (i + 1) % len(spinChars)
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
 
-// Trace route scan using nmap
-func TraceRoute() {
+func PortScan() {
 
 	fmt.Print("\033[H\033[2J") // Clear the console
-	banner.BannerTraceRoute()
+	banner.BannerPortScanner()
 
-	fmt.Print("\n ----TO WALK YOU THE PATH----\n")
+	fmt.Print("\n         ----TO SNEAK IN----\n")
 
-	chekTraceInput()
+	chekInput()
 
 }
 
-func chekTraceInput() {
+func chekInput() {
 
 CheckInputLoop:
 	for {
 
 		scanner := bufio.NewScanner(os.Stdin)
 
-		fmt.Print("\n\nInsert URL or IP ADDRESS to trace the route \n\nor type BACK to return to menu:  ")
+		fmt.Print("\n\nInsert URL or IP ADDRESS to scan \n\nor type BACK to return to menu:  ")
 
 		scanner.Scan()
 
-		input := scanner.Text()
+		host := scanner.Text()
 
-		switch strings.ToLower(input) {
+		switch strings.ToLower(host) {
 
 		case "":
 			fmt.Print("\nNot an option...")
 			time.Sleep(2 * time.Second)
 
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.BannerTraceRoute()
+			banner.BannerPortScanner()
 
 			goto CheckInputLoop
 
@@ -83,9 +81,9 @@ CheckInputLoop:
 		default:
 
 			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.BannerTraceRoute()
+			banner.BannerPortScanner()
 
-			nmapTraceScan(input)
+			nmapPortScan(host)
 
 			break CheckInputLoop
 		}
@@ -93,9 +91,8 @@ CheckInputLoop:
 	}
 }
 
-func nmapTraceScan(host string) {
-
-	cmd := exec.Command("nmap", host, "--traceroute")
+func nmapPortScan(host string) {
+	cmd := exec.Command("nmap", host)
 
 	// Channel and wait group for synchronization
 	done := make(chan struct{})
@@ -103,7 +100,7 @@ func nmapTraceScan(host string) {
 
 	// Start the spinner animation
 	wg.Add(1)
-	go spinnerAnim(done, &wg)
+	go spinner(done, &wg)
 
 	out, err := cmd.Output()
 
@@ -112,38 +109,32 @@ func nmapTraceScan(host string) {
 	wg.Wait()
 
 	if err != nil {
-		// If there was any error, print it here
+
 		fmt.Println("\n\nCould not run command:", err)
-		fmt.Print("\nMust be run as root.\n\n")
 		return
 	}
 
-	// Clear the console and print the banner
-	fmt.Print("\033[H\033[2J")
-	banner.BannerTraceRoute()
+	fmt.Print("\033[H\033[2J") // Clear the console
+	banner.BannerPortScanner()
 
-	// Create a new table
+	fmt.Print("\n")
+
 	t := table.NewWriter()
-	t.SetTitle("Nmap trace route scan Results")
+	t.SetTitle("Nmap Port Scan Results")
 	t.AppendHeader(table.Row{"#", "Results"})
 
-	// Split the output by newline character
 	lines := strings.Split(string(out), "\n")
 
-	// Append each line to the table
 	for i, line := range lines {
 		t.AppendRow(table.Row{i + 1, line})
 	}
 
-	// Render and print the table
 	fmt.Println(t.Render())
 
-	// Optional: Sleep for a short duration to make the output visible before the next iteration
 	time.Sleep(1 * time.Second)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
-	// Prompt the user to try another scan or go back to the Net Tools menu
 	fmt.Print("\n\nDo you want to perform another scan? (Y/N): ")
 
 	scanner.Scan()
@@ -153,10 +144,10 @@ func nmapTraceScan(host string) {
 	switch strings.ToLower(response) {
 
 	case "y":
-		TraceRoute()
+		PortScan()
 
 	case "n":
-		// Go back to the Net Tools menu
+
 		fmt.Print("\033[H\033[2J")
 		banner.PrintBanner()
 
@@ -164,7 +155,7 @@ func nmapTraceScan(host string) {
 
 	default:
 		fmt.Print("\nGoing back...")
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 
 		fmt.Print("\033[H\033[2J") // Clear the console
 		banner.PrintBanner()

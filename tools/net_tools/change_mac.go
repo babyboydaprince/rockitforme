@@ -1,4 +1,4 @@
-package tools
+package net_tools
 
 import (
 	"fmt"
@@ -190,7 +190,6 @@ func findInterfaces() {
 
 	} else if runtime.GOOS == "windows" {
 
-		// Get the list of available interfaces
 		devices, err := pcap.FindAllDevs()
 		if err != nil {
 			log.Fatal(err)

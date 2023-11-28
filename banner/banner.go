@@ -65,3 +65,13 @@ func BannerArpSpoof() {
 	asciiLogo1.Print()
 	asciiLogo2.Print()
 }
+
+func BannerWirelessTools() {
+	asciiLogo1 := figure.NewColorFigure("Wireless", "elite", "white", true)
+	asciiLogo2 := figure.NewColorFigure("Tools !", "elite", "white", true)
+
+	fmt.Print("\033[H\033[2J")
+
+	asciiLogo1.Print()
+	asciiLogo2.Print()
+}

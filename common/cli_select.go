@@ -29,7 +29,7 @@ func SingleSelect(prompt string, options []string) string {
 	input := scanner.Text()
 
 	if input == "" {
-		// Handle the case where the user presses Enter without choosing anything
+
 		fmt.Print("\033[H\033[2J") // Clear the console
 		banner.PrintBanner()
 

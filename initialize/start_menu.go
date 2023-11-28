@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"rockitforme/banner"
 	"rockitforme/common"
-	"rockitforme/tools"
+	"rockitforme/tools/net_tools"
 	"syscall"
 )
 
@@ -44,8 +44,8 @@ MainMenuLoop:
 		options := common.SingleSelect(
 			"\n     ---THE EVER PRESENT---\n    ----SILENT OBSERVER-----\n\n       Made by:  BraiNiac\n\n", []string{
 				"Net tools",
-				"Web",
 				"Wireless",
+				"Web",
 				"SDR",
 				"NFC & RFID",
 				"Exit",
@@ -54,7 +54,7 @@ MainMenuLoop:
 		inSubmodule = false
 
 		if options == "" {
-			// If the user presses Enter without choosing an option, stay in the current menu
+
 			continue
 		}
 
@@ -77,7 +77,7 @@ MainMenuLoop:
 			})
 
 			if netOptions == "" {
-				// If the user presses Enter without choosing an option, stay in the current menu
+
 				continue
 			}
 
@@ -87,19 +87,19 @@ MainMenuLoop:
 
 				inSubmodule = false
 
-				tools.GoChangeMyMac()
+				net_tools.GoChangeMyMac()
 
 			case "Port scanner":
 
 				inSubmodule = false
 
-				tools.PortScan()
+				net_tools.PortScan()
 
 			case "Trace ip route":
 
 				inSubmodule = false
 
-				tools.TraceRoute()
+				net_tools.TraceRoute()
 
 			case "Arp spoof":
 
@@ -124,7 +124,76 @@ MainMenuLoop:
 
 				gateway := scanner.Text()
 
-				tools.ArpSpoof(target, gateway)
+				net_tools.ArpSpoof(target, gateway)
+
+			case "Go back":
+				fmt.Print("\033[H\033[2J") // Clear the console
+				banner.PrintBanner()
+
+				goto MainMenuLoop
+
+			case "Exit":
+				fmt.Print("\033[H\033[2J") // Clear the console
+				banner.PrintBanner()
+
+				fmt.Println("\nExiting...")
+				os.Exit(0)
+
+			}
+
+		case "Wireless":
+
+			inSubmodule = false
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerWirelessTools()
+
+			wirelessOptions := common.SingleSelect("\n  ----LOVE IS IN THE AIR----\n", []string{
+				"Aircrack-ng",
+				"Aireplay-ng",
+				"Airmon-ng",
+				"Airodump-ng",
+				"Packetforge-ng",
+				"Wifite",
+				"Oneshot",
+				"Go back",
+				"Exit",
+			})
+
+			if wirelessOptions == "" {
+
+				continue
+			}
+
+			switch wirelessOptions {
+
+			case "Aircrack-ng":
+
+				inSubmodule = false
+
+			case "Aireplay-ng":
+
+				inSubmodule = false
+
+			case "Airmon-ng":
+
+				inSubmodule = false
+
+			case "Airodump-ng":
+
+				inSubmodule = false
+
+			case "Packetforge-ng":
+
+				inSubmodule = false
+
+			case "Wifite":
+
+				inSubmodule = false
+
+			case "Oneshot":
+
+				inSubmodule = false
 
 			case "Go back":
 				fmt.Print("\033[H\033[2J") // Clear the console
@@ -146,12 +215,6 @@ MainMenuLoop:
 			banner.PrintBanner()
 
 			fmt.Println("Web boy")
-
-		case "Wireless":
-			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
-
-			fmt.Println("Wifi boy")
 
 		case "SDR":
 			fmt.Print("\033[H\033[2J") // Clear the console

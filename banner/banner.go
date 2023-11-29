@@ -106,7 +106,7 @@ func BannerSDRTools() {
 	asciiLogo2.Print()
 }
 
-func BannerNfcTools() {
+func Bannernfctools() {
 	asciiLogo1 := figure.NewColorFigure("NFC", "elite", "blue", true)
 	asciiLogo2 := figure.NewColorFigure("Tools !", "elite", "blue", true)
 

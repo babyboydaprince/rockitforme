@@ -75,3 +75,43 @@ func BannerWirelessTools() {
 	asciiLogo1.Print()
 	asciiLogo2.Print()
 }
+
+func BannerAircrack() {
+	asciiLogo1 := figure.NewColorFigure("Aircrack ng", "elite", "purple", true)
+	asciiLogo2 := figure.NewColorFigure("Suite !", "elite", "purple", true)
+
+	fmt.Print("\033[H\033[2J")
+
+	asciiLogo1.Print()
+	asciiLogo2.Print()
+}
+
+func BannerWebTools() {
+	asciiLogo1 := figure.NewColorFigure("Web", "elite", "green", true)
+	asciiLogo2 := figure.NewColorFigure("Tools !", "elite", "green", true)
+
+	fmt.Print("\033[H\033[2J")
+
+	asciiLogo1.Print()
+	asciiLogo2.Print()
+}
+
+func BannerSDRTools() {
+	asciiLogo1 := figure.NewColorFigure("SDR", "elite", "yellow", true)
+	asciiLogo2 := figure.NewColorFigure("Tools !", "elite", "yellow", true)
+
+	fmt.Print("\033[H\033[2J")
+
+	asciiLogo1.Print()
+	asciiLogo2.Print()
+}
+
+func BannerNfcTools() {
+	asciiLogo1 := figure.NewColorFigure("NFC", "elite", "blue", true)
+	asciiLogo2 := figure.NewColorFigure("Tools !", "elite", "blue", true)
+
+	fmt.Print("\033[H\033[2J")
+
+	asciiLogo1.Print()
+	asciiLogo2.Print()
+}

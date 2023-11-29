@@ -14,7 +14,7 @@ NFCToolsMenuLoop:
 	for {
 
 		fmt.Print("\033[H\033[2J") // Clear the console
-		banner.BannerNfcTools()
+		banner.BannerNFCTools()
 
 		nfcOptions := common.SingleSelect("\n  ----MAKE CONTACT NO MORE----\n    ----GO CONTACTLESS----\n\n", []string{
 			"LIBNFC",

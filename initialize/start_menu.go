@@ -8,6 +8,10 @@ import (
 	"rockitforme/banner"
 	"rockitforme/common"
 	"rockitforme/tools/net_tools"
+	"rockitforme/tools/nfc_tools"
+	"rockitforme/tools/sdr_tools"
+	"rockitforme/tools/web_tools"
+	"rockitforme/tools/wireless_tools"
 	"syscall"
 )
 
@@ -140,93 +144,26 @@ MainMenuLoop:
 				os.Exit(0)
 
 			}
-
+			//-----------------------------------------------------------------------------------------------------------------
 		case "Wireless":
-
 			inSubmodule = false
 
-			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.BannerWirelessTools()
-
-			wirelessOptions := common.SingleSelect("\n  ----LOVE IS IN THE AIR----\n", []string{
-				"Aircrack-ng",
-				"Aireplay-ng",
-				"Airmon-ng",
-				"Airodump-ng",
-				"Packetforge-ng",
-				"Wifite",
-				"Oneshot",
-				"Go back",
-				"Exit",
-			})
-
-			if wirelessOptions == "" {
-
-				continue
-			}
-
-			switch wirelessOptions {
-
-			case "Aircrack-ng":
-
-				inSubmodule = false
-
-			case "Aireplay-ng":
-
-				inSubmodule = false
-
-			case "Airmon-ng":
-
-				inSubmodule = false
-
-			case "Airodump-ng":
-
-				inSubmodule = false
-
-			case "Packetforge-ng":
-
-				inSubmodule = false
-
-			case "Wifite":
-
-				inSubmodule = false
-
-			case "Oneshot":
-
-				inSubmodule = false
-
-			case "Go back":
-				fmt.Print("\033[H\033[2J") // Clear the console
-				banner.PrintBanner()
-
-				goto MainMenuLoop
-
-			case "Exit":
-				fmt.Print("\033[H\033[2J") // Clear the console
-				banner.PrintBanner()
-
-				fmt.Println("\nExiting...")
-				os.Exit(0)
-
-			}
+			wireless_tools.WirelessTools()
 
 		case "Web":
-			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			inSubmodule = false
 
-			fmt.Println("Web boy")
+			web_tools.WebTools()
 
 		case "SDR":
-			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			inSubmodule = false
 
-			fmt.Println("SDR boy")
+			sdr_tools.SDRTools()
 
 		case "NFC & RFID":
-			fmt.Print("\033[H\033[2J") // Clear the console
-			banner.PrintBanner()
+			inSubmodule = false
 
-			fmt.Println("NFC boy")
+			nfc_tools.NFCTools()
 
 		case "Exit":
 			fmt.Print("\033[H\033[2J") // Clear the console

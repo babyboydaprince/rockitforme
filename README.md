@@ -12,10 +12,19 @@ and more to come soon.
 
 You can run the Go script in all operational systems with:
 
- ```
+```
 go run main.go
 ```
+or you can:
 
+```
+go build .    in the project root, and it will compile the executable for you.
+```
+In case you compiled the binary, you can just:
+
+```
+./rockitforme
+```
 ### 📋 Prerequisites
 
 - Golang 1.20+
@@ -46,7 +55,7 @@ dependencies automatically.
 
 ## 📄 Terms
 
-I, the developer, do not take any responsibility charges for bad usage
+I, the developer, do not take any responsibility charges for misuse
 of this software.
 
 This tool was created for study purposes.
@@ -59,11 +68,17 @@ Respect other people's privacy.
 
 - Windows full compatibility
 - Windows interface enabler and disabler complete functionality for MAC CHANGER;
-- Wireless pentesting tools;
-- Web pentesting tools;
-- SDR tools;
-- And much more...
+- Much more to come...
 
 ---
+This framework is dedicated to the Security community, as it was and remains being the source
+of my inspiration to maintain following the path and also fight for what I've always desired.
+
+In This swiss army knife framework you will find a great deal of tools that keep me in company and
+I believe it always will for my entire life.
+
+It also contains tools I designed, and will have more of them.
+
+When the first stable release comes I will leave here all my inspirations for this project.
 
 ⌨️ Made with ❤️ by [BraiNiac](https://github.com/babyboydaprince) 👽

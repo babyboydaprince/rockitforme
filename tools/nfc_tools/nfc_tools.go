@@ -17,7 +17,6 @@ NFCToolsMenuLoop:
 		banner.BannerNFCTools()
 
 		nfcOptions := common.SingleSelect("\n  ----MAKE CONTACT NO MORE----\n    ----GO CONTACTLESS----\n\n", []string{
-			"LIBNFC",
 			"NFC-TOOLS",
 			"MFOC",
 			"MFCUK",
@@ -32,23 +31,9 @@ NFCToolsMenuLoop:
 
 		switch nfcOptions {
 
-		case "LIBNFC":
-			cmd := exec.Command("gnome-terminal", "--", "bash", "-c", "libnfc; exec bash")
-
-			err := cmd.Run()
-			if err != nil {
-				fmt.Println("Error:", err)
-				return
-			}
-			err = cmd.Wait()
-			if err != nil {
-				fmt.Println("Error waiting for command:", err)
-			}
-			goto NFCToolsMenuLoop
-
 		case "NFC-TOOLS":
 
-			cmd := exec.Command("gnome-terminal", "--", "bash", "-c", "nfc-tools; exec bash")
+			cmd := exec.Command("gnome-terminal", "--", "bash", "-c", "nfc-scan-device; exec bash")
 
 			err := cmd.Run()
 			if err != nil {

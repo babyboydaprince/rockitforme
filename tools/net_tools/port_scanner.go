@@ -24,7 +24,6 @@ func spinner(done chan struct{}, wg *sync.WaitGroup) {
 		case <-done:
 			return
 		default:
-			fmt.Print("\033[H\033[2J") // Clear the console
 			banner.BannerPortScanner()
 			fmt.Print("\n\n")
 			fmt.Printf("              Scanning... %s\r", spinChars[i])

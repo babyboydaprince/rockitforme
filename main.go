@@ -17,6 +17,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	initialize.CheckForDependencies()
+
 	banner.PrintBanner()
 	initialize.StartMenu()
 }

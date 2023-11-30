@@ -24,7 +24,6 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 		case <-done:
 			return
 		default:
-			fmt.Print("\033[H\033[2J") // Clear the console
 			banner.BannerTraceRoute()
 			fmt.Print("\n\n")
 			fmt.Printf("        Tracing Route... %s\r", spinChars[i])

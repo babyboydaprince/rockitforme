@@ -295,10 +295,6 @@ WirelessToolsMenuLoop:
 			goto WirelessToolsMenuLoop
 
 		case "Oneshot":
-			// alias oneshot='python /home/user/Documents/Tools/OneShot/oneshot.py'
-			// export PATH=$PATH:/usr/local/bin/OneShot
-			// export PATH=$PATH:~~/bin
-			//  ln -s /home/user/GoLand-2023.2.5/bin/goland.sh /usr/local/bin/goland
 			cmd := exec.Command("gnome-terminal",
 				"--", "bash", "-c", "oneshot.py; exec bash")
 

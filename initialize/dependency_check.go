@@ -43,9 +43,7 @@ func checkAppsInstalled() {
 	s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
 
 	s.Start()
-	installers.NmapInstall("installed")
-
-	fmt.Print("NMAP.....")
+	fmt.Printf("\r%sNMAP.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
@@ -71,12 +69,12 @@ func checkAppsInstalled() {
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
-	installers.OneshotInstall("installed")
-
-	fmt.Printf("\r%sOneshot.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(1 * time.Second)
+	//installers.OneshotInstall("installed")
+	//
+	//fmt.Printf("\r%sOneshot.....", "")
+	//color.Green("OK")
+	//fmt.Println()
+	//time.Sleep(1 * time.Second)
 
 	installers.AirgeddonInstall("installed")
 

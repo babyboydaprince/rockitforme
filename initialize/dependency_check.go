@@ -2,11 +2,12 @@ package initialize
 
 import (
 	"fmt"
-	"github.com/briandowns/spinner"
-	"github.com/fatih/color"
 	"rockitforme/banner"
 	"rockitforme/initialize/installers"
 	"time"
+
+	"github.com/briandowns/spinner"
+	"github.com/fatih/color"
 )
 
 func CheckForDependencies() {
@@ -43,27 +44,31 @@ func checkAppsInstalled() {
 	s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
 
 	s.Start()
+	installers.NmapInstall("installed")
 	fmt.Printf("\r%sNMAP.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
-	installers.AircrackInstall("installed")
+	installers.BettercapInstall("installed")
+	fmt.Printf("\r%sBerttercap.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(1 * time.Second)
 
+	installers.AircrackInstall("installed")
 	fmt.Printf("\r%sAircrack-ng.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.DsniffInstall("installed")
-
 	fmt.Printf("\r%sdsniff.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.WifiteInstall("installed")
-
 	fmt.Printf("\r%sWifite.....", "")
 	color.Green("OK")
 	fmt.Println()
@@ -77,56 +82,48 @@ func checkAppsInstalled() {
 	//time.Sleep(1 * time.Second)
 
 	installers.AirgeddonInstall("installed")
-
 	fmt.Printf("\r%sAirgeddon.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.BurpsuiteInstall("installed")
-
 	fmt.Printf("\r%sBurpsuite.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.SqlmapInstall("installed")
-
 	fmt.Printf("\r%sSQLMAP.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.NiktoInstall("installed")
-
 	fmt.Printf("\r%sNIKTO.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.WpscanInstall("installed")
-
 	fmt.Printf("\r%sWPSCAN.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.GqrxInstall("installed")
-
 	fmt.Printf("\r%sGQRX.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.NfcToolsInstall("installed")
-
 	fmt.Printf("\r%sNFC-TOOLS.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(1 * time.Second)
 
 	installers.MfocInstall("installed")
-
 	fmt.Printf("\r%sMFOC.....", "")
 	color.Green("OK")
 	fmt.Println()

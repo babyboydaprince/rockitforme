@@ -72,6 +72,7 @@ MainMenuLoop:
 			banner.BannerNetTools()
 
 			netOptions := common.SingleSelect("\n  ----TO SHOW YOU THE WAY----\n", []string{
+				"Bettercap",
 				"MAC Changer",
 				"Port scanner",
 				"Trace ip route",
@@ -86,6 +87,12 @@ MainMenuLoop:
 			}
 
 			switch netOptions {
+
+			case "Bettercap":
+
+				inSubmodule = false
+
+				net_tools.GoChangeMyMac()
 
 			case "MAC Changer":
 

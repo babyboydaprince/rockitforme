@@ -2,14 +2,13 @@ package net_tools
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 )
 
-func Bettercap()  {
+func Bettercap() {
 
 	cmd := exec.Command("gnome-terminal",
-		"--", "bash", "-c", "nmap --help; exec bash")
+		"--", "bash", "-c", "bettercap --help; exec bash")
 
 	err := cmd.Run()
 	if err != nil {
@@ -19,5 +18,6 @@ func Bettercap()  {
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Println("Error waiting for command:", err)
-	
+	}
+
 }

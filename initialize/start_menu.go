@@ -92,7 +92,12 @@ MainMenuLoop:
 
 				inSubmodule = false
 
-				net_tools.GoChangeMyMac()
+				net_tools.Bettercap()
+
+				fmt.Print("\033[H\033[2J") // Clear the console
+				banner.PrintBanner()
+
+				goto MainMenuLoop
 
 			case "MAC Changer":
 

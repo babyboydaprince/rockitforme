@@ -8,7 +8,7 @@ import (
 func Bettercap() {
 
 	cmd := exec.Command("gnome-terminal",
-		"--", "bash", "-c", "bettercap --help; exec bash")
+		"--", "bash", "-c", "bettercap; exec bash")
 
 	err := cmd.Run()
 	if err != nil {

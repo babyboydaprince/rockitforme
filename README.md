@@ -47,7 +47,7 @@ dependencies automatically.
 
 - Golang 1.21
 
-## 📌Go change my mac version
+## 📌Rock it for me! version
 
 - 1.0
 

@@ -247,12 +247,20 @@ MacChangerLoop:
 			err = restoreOriginalMAC(interfaceToRestore, originalMAC)
 			handleError(err)
 			fmt.Printf("\nOriginal MAC address for %s restored: %s\n", interfaceToRestore, originalMAC)
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerMacChanger()
 
 		case "Set random MAC":
 			interfaceName := askForInterface()
 			err := setRandomMAC(interfaceName)
 			handleError(err)
 			fmt.Printf("\nRandomized MAC address set for %s\n", interfaceName)
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerMacChanger()
 
 		case "Set MAC manually":
 			interfaceName := askForInterface()
@@ -260,6 +268,10 @@ MacChangerLoop:
 			err := changeMAC(interfaceName, manualMAC)
 			handleError(err)
 			fmt.Printf("\nMAC address for %s changed to %s\n", interfaceName, manualMAC)
+			time.Sleep(2 * time.Second)
+
+			fmt.Print("\033[H\033[2J") // Clear the console
+			banner.BannerMacChanger()
 
 		case "Go back to main menu":
 			fmt.Print("\033[H\033[2J") // Clear the console

@@ -82,3 +82,4 @@ It also contains tools I designed, and will have more of them.
 When the first stable release comes I will leave here all my inspirations for this project.
 
 ⌨️ Made with ❤️ by [BraiNiac](https://github.com/babyboydaprince) 👽
+

@@ -1,0 +1,12 @@
+# Automatically created by mypy
+.mypy_cache/
+.vscode/
+venv/
+modules/__pycache__/
+modules/bones/__pycache__/
+modules/bones/crypt/__pycache__/
+modules/jackmail/__pycache__/
+modules/jackphone/__pycache__/
+modules/ref/__pycache__/
+.idea/
+modules/protocols/__pycache__/

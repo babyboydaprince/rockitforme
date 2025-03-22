@@ -4,32 +4,37 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	_ "rockitforme/utils"
 )
 
 const nfctoolsCommand = "nfc-scan-device"
 
-func NfcToolsInstall(check string) bool {
+// TODO - EXAMPLE OF DEPENDENCY SET UP
+var nfcToolsDependencies = map[string][]string{
+	"debian": {"sudo", "ruby"},
+	"fedora": {"sudo", "ruby"},
+	"arch":   {"sudo", "ruby"},
+}
 
+func NfcToolsInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checknfctoolsDependencies(); err != nil {
+		deps, ok := nfcToolsDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checknfctoolsDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
 		if isnfctoolsInstalled() {
-			//fmt.Println("nfctools is already installed.")
-
 			return true
-
 		} else {
-			//fmt.Println("Installing nfctools...")
-			if err := installnfctools(); err != nil {
+			if err := installnfctools(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("nfctools installed successfully.")
-
 			return false
 		}
 	default:
@@ -44,22 +49,34 @@ func isnfctoolsInstalled() bool {
 	return err == nil
 }
 
-func installnfctools() error {
-	cmd := exec.Command("sudo", "apt", "install", "nfctools", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installnfctools(OpSystem string) error {
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "nfctools", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "nfctools", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "nfctools")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	default:
+		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
 }
 
-func checknfctoolsDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checknfctoolsDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
 }

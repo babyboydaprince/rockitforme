@@ -8,28 +8,32 @@ import (
 
 const nmapCommand = "nmap"
 
-func NmapInstall(check string) bool {
+// TODO - EXAMPLE OF DEPENDENCY SET UP
+var nmapDependencies = map[string][]string{
+	"debian": {"sudo", "ruby"},
+	"fedora": {"sudo", "ruby"},
+	"arch":   {"sudo", "ruby"},
+}
 
+func NmapInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checkNmapDependencies(); err != nil {
+		deps, ok := nmapDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checkNmapDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
 		if isNmapInstalled() {
-			//fmt.Println("nmap is already installed.")
-
 			return true
-
 		} else {
-			//fmt.Println("Installing nmap...")
-			if err := installNmap(); err != nil {
+			if err := installNmap(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("nmap installed successfully.")
-
 			return false
 		}
 	default:
@@ -44,22 +48,36 @@ func isNmapInstalled() bool {
 	return err == nil
 }
 
-func installNmap() error {
-	cmd := exec.Command("sudo", "apt", "install", "nmap", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installNmap(OpSystem string) error {
+
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "nmap", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "nmap", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "nmap")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	default:
+		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
+
 }
 
-func checkNmapDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checkNmapDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
 }

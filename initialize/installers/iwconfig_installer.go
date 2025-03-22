@@ -7,31 +7,20 @@ import (
 	_ "rockitforme/utils"
 )
 
-const burpsuiteCommand = "burpsuite"
+const iwconfigCommand = "iwconfig"
 
-// TODO - EXAMPLE OF DEPENDENCY SET UP
-var burpsuiteDependencies = map[string][]string{
-	"debian": {"sudo", "ruby"},
-	"fedora": {"sudo", "ruby"},
-	"arch":   {"sudo", "ruby"},
-}
-
-func BurpsuiteInstall(check string, OpSystem string) bool {
+func IwconfigInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		deps, ok := burpsuiteDependencies[OpSystem]
-		if !ok {
-			return false
-		}
-		if err := checkburpsuiteDependencies(deps); err != nil {
+		if err := checkIwconfigDependencies(); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
-		if isburpsuiteInstalled() {
+		if isiwconfigInstalled() {
 			return true
 		} else {
-			if err := installburpsuite(OpSystem); err != nil {
+			if err := installiwconfig(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
@@ -44,25 +33,25 @@ func BurpsuiteInstall(check string, OpSystem string) bool {
 	return false
 }
 
-func isburpsuiteInstalled() bool {
-	_, err := exec.LookPath(burpsuiteCommand)
+func isiwconfigInstalled() bool {
+	_, err := exec.LookPath(iwconfigCommand)
 	return err == nil
 }
 
-func installburpsuite(OpSystem string) error {
+func installiwconfig(OpSystem string) error {
 	switch OpSystem {
 	case "debian":
-		cmd := exec.Command("sudo", "apt", "install", "burpsuite", "-y")
+		cmd := exec.Command("sudo", "apt", "install", "wireless-tools", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
 	case "fedora":
-		cmd := exec.Command("sudo", "dnf", "install", "burpsuite", "-y")
+		cmd := exec.Command("sudo", "dnf", "install", "wireless-tools", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
 	case "arch":
-		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "burpsuite")
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "wireless_tools")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
@@ -71,12 +60,15 @@ func installburpsuite(OpSystem string) error {
 	}
 }
 
-func checkburpsuiteDependencies(dependencies []string) error {
+func checkIwconfigDependencies() error {
+	dependencies := []string{"sudo"}
+
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
+
 	return nil
 }

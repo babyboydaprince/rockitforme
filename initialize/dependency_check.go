@@ -10,14 +10,14 @@ import (
 	"github.com/fatih/color"
 )
 
-func CheckForDependencies() {
-	fmt.Print("\033[H\033[2J") // Clear the console
+func CheckForDependencies(OpSystem string) {
+	fmt.Print("\033[H\033[2J")
 	banner.PrintBanner()
 
 	color.Yellow("\n\nChecking installed apps:\n\n")
 	fmt.Println()
 
-	checkAppsInstalled()
+	checkAppsInstalled(OpSystem)
 
 	time.Sleep(1 * time.Second)
 
@@ -40,36 +40,30 @@ func checkDependencies() {
 	time.Sleep(1 * time.Second)
 }
 
-func checkAppsInstalled() {
+func checkAppsInstalled(OpSystem string) {
 	s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
 
 	s.Start()
-	installers.NmapInstall("installed")
+	installers.NmapInstall("installed", OpSystem)
 	fmt.Printf("\r%sNMAP.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.BettercapInstall("installed")
+	installers.BettercapInstall("installed", OpSystem)
 	fmt.Printf("\r%sBerttercap.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.AircrackInstall("installed")
+	installers.AircrackInstall("installed", OpSystem)
 	fmt.Printf("\r%sAircrack-ng.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.DsniffInstall("installed")
+	installers.DsniffInstall("installed", OpSystem)
 	fmt.Printf("\r%sdsniff.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
-
-	installers.WifiteInstall("installed")
-	fmt.Printf("\r%sWifite.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
@@ -81,58 +75,121 @@ func checkAppsInstalled() {
 	//fmt.Println()
 	//time.Sleep(1 * time.Second)
 
-	installers.AirgeddonInstall("installed")
-	fmt.Printf("\r%sAirgeddon.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
-
-	installers.BurpsuiteInstall("installed")
+	installers.BurpsuiteInstall("installed", OpSystem)
 	fmt.Printf("\r%sBurpsuite.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.SqlmapInstall("installed")
+	installers.SqlmapInstall("installed", OpSystem)
 	fmt.Printf("\r%sSQLMAP.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.NiktoInstall("installed")
+	installers.NiktoInstall("installed", OpSystem)
 	fmt.Printf("\r%sNIKTO.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.WpscanInstall("installed")
+	installers.WpscanInstall("installed", OpSystem)
 	fmt.Printf("\r%sWPSCAN.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.GqrxInstall("installed")
+	installers.GqrxInstall("installed", OpSystem)
 	fmt.Printf("\r%sGQRX.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.NfcToolsInstall("installed")
+	installers.NfcToolsInstall("installed", OpSystem)
 	fmt.Printf("\r%sNFC-TOOLS.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.MfocInstall("installed")
+	installers.MfocInstall("installed", OpSystem)
 	fmt.Printf("\r%sMFOC.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.MfcukInstall("installed")
-	s.Stop()
+	installers.MfcukInstall("installed", OpSystem)
 	fmt.Printf("\r%sMFCUK.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
+
+	installers.IwconfigInstall("installed", OpSystem)
+	fmt.Printf("\r%siwconfig.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.TsharkInstall("installed", OpSystem)
+	fmt.Printf("\r%siwconfig.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.ReaverInstall("installed", OpSystem)
+	fmt.Printf("\r%reaver.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.BullyInstall("installed", OpSystem)
+	fmt.Printf("\r%bully.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.CowpattyInstall("installed", OpSystem)
+	fmt.Printf("\r%callpatty.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.PyritInstall("installed", OpSystem)
+	fmt.Printf("\r%pyrit.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.HashcatInstall("installed", OpSystem)
+	fmt.Printf("\r%hashcat.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.HcxdumptoolInstall("installed", OpSystem)
+	fmt.Printf("\r%hcxdumptool.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	installers.HcxpcaptoolInstall("installed", OpSystem)
+	fmt.Printf("\r%hcxpcaptool.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	// TODO - DEPENDENCY CHECK needs WIFITE setup
+	installers.WifiteInstall("installed", OpSystem)
+	fmt.Printf("\r%sWifite.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
+	// TODO - DEPENDENCY CHECK needs WIFITE setup
+	installers.AirgeddonInstall("installed", OpSystem)
+	s.Stop()
+	fmt.Printf("\r%sAirgeddon.....", "")
+	color.Green("OK")
+	fmt.Println()
+	time.Sleep(500 * time.Millisecond)
+
 }

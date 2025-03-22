@@ -13,7 +13,7 @@ func NFCTools() {
 NFCToolsMenuLoop:
 	for {
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.BannerNFCTools()
 
 		nfcOptions := common.SingleSelect("\n  ----MAKE CONTACT NO MORE----\n    ----GO CONTACTLESS----\n\n", []string{
@@ -79,13 +79,13 @@ NFCToolsMenuLoop:
 			goto NFCToolsMenuLoop
 
 		case "Go back":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break NFCToolsMenuLoop
 
 		case "Exit":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			fmt.Println("\nExiting...")

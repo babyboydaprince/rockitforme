@@ -35,7 +35,7 @@ func spinnerAnim(done chan struct{}, wg *sync.WaitGroup) {
 
 func TraceRoute() {
 
-	fmt.Print("\033[H\033[2J") // Clear the console
+	fmt.Print("\033[H\033[2J")
 	banner.BannerTraceRoute()
 
 	fmt.Print("\n ----TO WALK YOU THE PATH----\n")
@@ -63,7 +63,7 @@ CheckInputLoop:
 			fmt.Print("\nNot an option...")
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerTraceRoute()
 
 			goto CheckInputLoop
@@ -72,14 +72,14 @@ CheckInputLoop:
 			fmt.Print("\nGoing back...")
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break CheckInputLoop
 
 		default:
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerTraceRoute()
 
 			nmapTraceScan(input)
@@ -94,17 +94,14 @@ func nmapTraceScan(host string) {
 
 	cmd := exec.Command("nmap", host, "--traceroute")
 
-	// Channel and wait group for synchronization
 	done := make(chan struct{})
 	var wg sync.WaitGroup
 
-	// Start the spinner animation
 	wg.Add(1)
 	go spinnerAnim(done, &wg)
 
 	out, err := cmd.Output()
 
-	// Stop the spinner when the scan is completed
 	close(done)
 	wg.Wait()
 
@@ -156,7 +153,7 @@ func nmapTraceScan(host string) {
 		fmt.Print("\nGoing back...")
 		time.Sleep(1 * time.Second)
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.PrintBanner()
 
 		return

@@ -7,31 +7,31 @@ import (
 	_ "rockitforme/utils"
 )
 
-const burpsuiteCommand = "burpsuite"
+const cowpatty = "cowpatty"
 
 // TODO - EXAMPLE OF DEPENDENCY SET UP
-var burpsuiteDependencies = map[string][]string{
+var cowpattyDependencies = map[string][]string{
 	"debian": {"sudo", "ruby"},
 	"fedora": {"sudo", "ruby"},
 	"arch":   {"sudo", "ruby"},
 }
 
-func BurpsuiteInstall(check string, OpSystem string) bool {
+func CowpattyInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		deps, ok := burpsuiteDependencies[OpSystem]
+		deps, ok := cowpattyDependencies[OpSystem]
 		if !ok {
 			return false
 		}
-		if err := checkburpsuiteDependencies(deps); err != nil {
+		if err := checkCowpattyDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
-		if isburpsuiteInstalled() {
+		if isCowpattyInstalled() {
 			return true
 		} else {
-			if err := installburpsuite(OpSystem); err != nil {
+			if err := installCowpatty(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
@@ -44,25 +44,25 @@ func BurpsuiteInstall(check string, OpSystem string) bool {
 	return false
 }
 
-func isburpsuiteInstalled() bool {
-	_, err := exec.LookPath(burpsuiteCommand)
+func isCowpattyInstalled() bool {
+	_, err := exec.LookPath(cowpatty)
 	return err == nil
 }
 
-func installburpsuite(OpSystem string) error {
+func installCowpatty(OpSystem string) error {
 	switch OpSystem {
 	case "debian":
-		cmd := exec.Command("sudo", "apt", "install", "burpsuite", "-y")
+		cmd := exec.Command("sudo", "apt", "install", "cowpatty", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
 	case "fedora":
-		cmd := exec.Command("sudo", "dnf", "install", "burpsuite", "-y")
+		cmd := exec.Command("sudo", "dnf", "install", "cowpatty", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
 	case "arch":
-		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "burpsuite")
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "cowpatty")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
@@ -71,7 +71,7 @@ func installburpsuite(OpSystem string) error {
 	}
 }
 
-func checkburpsuiteDependencies(dependencies []string) error {
+func checkCowpattyDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {

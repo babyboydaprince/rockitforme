@@ -4,32 +4,37 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	_ "rockitforme/utils"
 )
 
-const aircrackNgCommand = "aircrack-ng"
+const aircrackCommand = "aircrack-ng"
 
-func AircrackInstall(check string) bool {
+// TODO - EXAMPLE OF DEPENDENCY SET UP
+var aircrackDependencies = map[string][]string{
+	"debian": {"sudo", "ruby"},
+	"fedora": {"sudo", "ruby"},
+	"arch":   {"sudo", "ruby"},
+}
 
+func AircrackInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checkAircrackDependencies(); err != nil {
+		deps, ok := aircrackDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checkAircrackDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
-		if isAircrackNgInstalled() {
-			//fmt.Println("Aircrack-ng is already installed.")
-
+		if isAircrackInstalled() {
 			return true
-
 		} else {
-			//fmt.Println("Installing Aircrack-ng...")
-			if err := installAircrackNg(); err != nil {
+			if err := installAircrack(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("Aircrack-ng installed successfully.")
-
 			return false
 		}
 	default:
@@ -39,27 +44,39 @@ func AircrackInstall(check string) bool {
 	return false
 }
 
-func isAircrackNgInstalled() bool {
-	_, err := exec.LookPath(aircrackNgCommand)
+func isAircrackInstalled() bool {
+	_, err := exec.LookPath(aircrackCommand)
 	return err == nil
 }
 
-func installAircrackNg() error {
-	cmd := exec.Command("sudo", "apt", "install", "aircrack-ng", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installAircrack(OpSystem string) error {
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "aircrack-ng", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "aircrack-ng", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "aircrack-ng")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	default:
+		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
 }
 
-func checkAircrackDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checkAircrackDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
 }

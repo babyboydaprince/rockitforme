@@ -1,5 +1,3 @@
-// common/common.go
-
 package common
 
 import (
@@ -10,8 +8,6 @@ import (
 	"strconv"
 )
 
-// SingleSelect displays a menu and prompts the user to select an option.
-// It returns the selected option or an empty string if the user presses Enter without choosing.
 func SingleSelect(prompt string, options []string) string {
 
 	fmt.Println(prompt)
@@ -30,24 +26,20 @@ func SingleSelect(prompt string, options []string) string {
 
 	if input == "" {
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.PrintBanner()
 
 		return ""
 	}
 
-	// Convert the input to an integer index
 	choiceIndex, err := strconv.Atoi(input)
 	if err != nil || choiceIndex < 1 || choiceIndex > len(options) {
-
-		// Handle invalid input (not a number or out of range)
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.PrintBanner()
 
 		return ""
 	}
 
-	// Adjust the index since arrays are zero-based
 	choiceIndex--
 
 	return options[choiceIndex]

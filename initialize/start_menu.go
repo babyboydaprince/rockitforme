@@ -21,15 +21,13 @@ func StartMenu() {
 
 	inSubmodule = false
 
-	// Listen for Ctrl+C signal
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
 
-	// Go routine to handle Ctrl+C signal
 	go func() {
 		<-sigCh
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.PrintBanner()
 
 		if inSubmodule {
@@ -68,7 +66,7 @@ MainMenuLoop:
 
 			inSubmodule = false
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerNetTools()
 
 			netOptions := common.SingleSelect("\n  ----TO SHOW YOU THE WAY----\n", []string{
@@ -94,7 +92,7 @@ MainMenuLoop:
 
 				net_tools.Bettercap()
 
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.PrintBanner()
 
 				goto MainMenuLoop
@@ -121,7 +119,7 @@ MainMenuLoop:
 
 				inSubmodule = false
 
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.BannerArpSpoof()
 
 				fmt.Print("\n    ----TO KEEP WATCH---\n")
@@ -143,13 +141,13 @@ MainMenuLoop:
 				net_tools.ArpSpoof(target, gateway)
 
 			case "Go back":
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.PrintBanner()
 
 				goto MainMenuLoop
 
 			case "Exit":
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.PrintBanner()
 
 				fmt.Println("\nExiting...")
@@ -178,7 +176,7 @@ MainMenuLoop:
 			nfc_tools.NFCTools()
 
 		case "Exit":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			fmt.Println("\nExiting...")

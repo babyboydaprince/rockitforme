@@ -89,7 +89,6 @@ func generateRandomMAC() (string, error) {
 
 func winChangeMAC(interfaceName string, newMAC string) error {
 
-	// Disable the network interface
 	disableCmd := exec.Command("netsh", "interface", "set", "interface", interfaceName, "admin=disable")
 	err := disableCmd.Run()
 	if err != nil {
@@ -124,13 +123,11 @@ func winChangeMAC(interfaceName string, newMAC string) error {
 
 	packet := gopacket.NewPacket(packetData, layers.LayerTypeEthernet, gopacket.Default)
 
-	// Send the packet to change the MAC address
 	err = handle.WritePacketData(packet.Data())
 	if err != nil {
 		return err
 	}
 
-	// Enable the network interface
 	enableCmd := exec.Command("netsh", "interface", "set", "interface", interfaceName, "admin=enable")
 	err = enableCmd.Run()
 	if err != nil {
@@ -181,7 +178,7 @@ func findInterfaces() {
 			t.AppendRow(table.Row{
 				i + 1, iface.Name, iface.Index, iface.MTU, iface.HardwareAddr})
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerMacChanger()
 			fmt.Println(t.Render())
 			time.Sleep(50 * time.Millisecond)
@@ -199,7 +196,7 @@ func findInterfaces() {
 			t.AppendRow(table.Row{
 				i + 1, device.Name, device.Description})
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerMacChanger()
 			fmt.Println(t.Render())
 			time.Sleep(50 * time.Millisecond)
@@ -210,7 +207,7 @@ func findInterfaces() {
 
 func GoChangeMyMac() {
 
-	fmt.Print("\033[H\033[2J") // Clear the console
+	fmt.Print("\033[H\033[2J")
 	banner.BannerMacChanger()
 
 MacChangerLoop:
@@ -249,7 +246,7 @@ MacChangerLoop:
 			fmt.Printf("\nOriginal MAC address for %s restored: %s\n", interfaceToRestore, originalMAC)
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerMacChanger()
 
 		case "Set random MAC":
@@ -259,7 +256,7 @@ MacChangerLoop:
 			fmt.Printf("\nRandomized MAC address set for %s\n", interfaceName)
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerMacChanger()
 
 		case "Set MAC manually":
@@ -270,11 +267,11 @@ MacChangerLoop:
 			fmt.Printf("\nMAC address for %s changed to %s\n", interfaceName, manualMAC)
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerMacChanger()
 
 		case "Go back to main menu":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break MacChangerLoop

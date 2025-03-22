@@ -13,7 +13,7 @@ func WebTools() {
 WebToolsMenuLoop:
 	for {
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.BannerWebTools()
 
 		webOptions := common.SingleSelect("\n ----ABOUT TO OCCUPY THE WEB----\n", []string{
@@ -111,13 +111,13 @@ WebToolsMenuLoop:
 			goto WebToolsMenuLoop
 
 		case "Go back":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break WebToolsMenuLoop
 
 		case "Exit":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			fmt.Println("\nExiting...")

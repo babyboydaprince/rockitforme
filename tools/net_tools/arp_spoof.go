@@ -13,7 +13,7 @@ import (
 
 func ArpSpoof(target string, gateway string) {
 
-	fmt.Print("\033[H\033[2J") // Clear the console
+	fmt.Print("\033[H\033[2J")
 	banner.BannerArpSpoof()
 
 	fmt.Print("\n    ----TO KEEP WATCH---\n")
@@ -33,18 +33,14 @@ func ArpSpoof(target string, gateway string) {
 			fmt.Println("\n\nError starting arpspoof:", err)
 			return
 		}
-		// Wait for the command to finish
 		cmd.Wait()
 	}()
 
-	// Listen for Ctrl+C signal
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
 
-	// Wait for the termination signal
 	<-sigCh
 
-	// Handle the termination gracefully
 	fmt.Println("\n\nStopping ARP Spoofing...")
 	if err := cmd.Process.Kill(); err != nil {
 		fmt.Println("\n\nError stopping arpspoof:", err)
@@ -86,7 +82,7 @@ CheckIPForwardLoop:
 			fmt.Print("\nNot an option...")
 			time.Sleep(2 * time.Second)
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerArpSpoof()
 
 			goto CheckIPForwardLoop

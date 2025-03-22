@@ -13,7 +13,7 @@ func WirelessTools() {
 WirelessToolsMenuLoop:
 	for {
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.BannerWirelessTools()
 
 		wirelessOptions := common.SingleSelect("\n  ----LOVE IS IN THE AIR----\n", []string{
@@ -34,7 +34,7 @@ WirelessToolsMenuLoop:
 
 		case "Aircrack-ng Suite":
 
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.BannerAircrack()
 
 			AircrackOptions := common.SingleSelect("\n  ----RIDERS ON THE STORM----\n", []string{
@@ -265,19 +265,19 @@ WirelessToolsMenuLoop:
 				goto WirelessToolsMenuLoop
 
 			case "Go back":
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.PrintBanner()
 
 				break WirelessToolsMenuLoop
 
 			case "Exit":
-				fmt.Print("\033[H\033[2J") // Clear the console
+				fmt.Print("\033[H\033[2J")
 				banner.PrintBanner()
 
 				fmt.Println("\nExiting...")
 				os.Exit(0)
 			}
-			//---------------------------------------------------------------------------------------------------------------
+
 		case "Wifite":
 			cmd := exec.Command("gnome-terminal",
 				"--", "bash", "-c", "wifite; exec bash")
@@ -327,13 +327,13 @@ WirelessToolsMenuLoop:
 			goto WirelessToolsMenuLoop
 
 		case "Go back":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break WirelessToolsMenuLoop
 
 		case "Exit":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			fmt.Println("\nExiting...")

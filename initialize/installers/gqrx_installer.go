@@ -4,32 +4,37 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	_ "rockitforme/utils"
 )
 
 const gqrxCommand = "gqrx"
 
-func GqrxInstall(check string) bool {
+// TODO - EXAMPLE OF DEPENDENCY SET UP
+var gqrxDependencies = map[string][]string{
+	"debian": {"sudo", "ruby"},
+	"fedora": {"sudo", "ruby"},
+	"arch":   {"sudo", "ruby"},
+}
 
+func GqrxInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checkgqrxDependencies(); err != nil {
+		deps, ok := gqrxDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checkgqrxDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
 		if isgqrxInstalled() {
-			//fmt.Println("gqrx is already installed.")
-
 			return true
-
 		} else {
-			//fmt.Println("Installing gqrx...")
-			if err := installgqrx(); err != nil {
+			if err := installGqrx(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("gqrx installed successfully.")
-
 			return false
 		}
 	default:
@@ -44,22 +49,34 @@ func isgqrxInstalled() bool {
 	return err == nil
 }
 
-func installgqrx() error {
-	cmd := exec.Command("sudo", "apt", "install", "gqrx-sdr", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installGqrx(OpSystem string) error {
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "gqrx-sdr", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "gqrx-sdr", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "gqrx-sdr")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	default:
+		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
 }
 
-func checkgqrxDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checkgqrxDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
 }

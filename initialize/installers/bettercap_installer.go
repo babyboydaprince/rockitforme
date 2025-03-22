@@ -4,32 +4,38 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	_ "rockitforme/utils"
 )
 
 const bettercapCommand = "bettercap"
 
-func BettercapInstall(check string) bool {
+// TODO - BETTERCAP, para libs usar WICH e extrair stdout
+var bettercapDependencies = map[string][]string{
+	"debian": {"which", "libusb-1.0-0-dev"},
+	"fedora": {"which", "libusb1-devel"},
+	"arch":   {"which", "libusb"},
+}
 
+func BettercapInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checkbettercapDependencies(); err != nil {
+		deps, ok := bettercapDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checkbettercapDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
 		if isbettercapInstalled() {
-			//fmt.Println("bettercap is already installed.")
-
 			return true
-
 		} else {
-			//fmt.Println("Installing bettercap...")
-			if err := installbettercap(); err != nil {
+			if err := installbettercap(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("bettercap installed successfully.")
-
 			return false
 		}
 	default:
@@ -44,22 +50,124 @@ func isbettercapInstalled() bool {
 	return err == nil
 }
 
-func installbettercap() error {
-	cmd := exec.Command("sudo", "apt", "install", "bettercap", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installbettercap(OpSystem string) error {
+	// Get the absolute path to the project root
+	projectRoot, err := getProjectRoot()
+	if err != nil {
+		return fmt.Errorf("error getting project root: %w", err)
+	}
+
+	// Construct the absolute path to the bettercap modules directory
+	bettercapModulesPath := filepath.Join(projectRoot, "initialize", "installers", "modules", "bettercap")
+
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "libusb-1.0-0-dev", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
+
+		cmd2 := exec.Command("sudo", "apt", "install", "bettercap", "-y")
+		cmd2.Stdout = os.Stdout
+		cmd2.Stderr = os.Stderr
+		return cmd2.Run()
+	case "fedora":
+		installLibusb := exec.Command("sudo", "dnf", "install", "libusb1-devel", "-y")
+		installLibusb.Stdout = os.Stdout
+		installLibusb.Stderr = os.Stderr
+		err := installLibusb.Run()
+		if err != nil {
+			return err
+		}
+
+		// Check if the bettercap directory already exists
+		if _, err := os.Stat(bettercapModulesPath); os.IsNotExist(err) {
+			// Clone the repository if it doesn't exist
+			getRepo := exec.Command("git", "clone", "https://github.com/bettercap/bettercap.git", bettercapModulesPath)
+			getRepo.Stdout = os.Stdout
+			getRepo.Stderr = os.Stderr
+			err = getRepo.Run()
+			if err != nil {
+				return fmt.Errorf("error cloning bettercap repository: %w", err)
+			}
+		} else if err != nil {
+			return fmt.Errorf("error checking bettercap directory: %w", err)
+		}
+
+		// Build and install bettercap
+		buildTool := exec.Command("make", "build")
+		buildTool.Dir = bettercapModulesPath // Set the working directory
+		buildTool.Stdout = os.Stdout
+		buildTool.Stderr = os.Stderr
+		err = buildTool.Run()
+		if err != nil {
+			return fmt.Errorf("error building bettercap: %w", err)
+		}
+
+		installTool := exec.Command("sudo", "make", "install")
+		installTool.Dir = bettercapModulesPath // Set the working directory
+		installTool.Stdout = os.Stdout
+		installTool.Stderr = os.Stderr
+		err = installTool.Run()
+		if err != nil {
+			return fmt.Errorf("error installing bettercap: %w", err)
+		}
+
+		return nil
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "libusb")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			return err
+		}
+
+		cmd2 := exec.Command("sudo", "pacman", "-S", "--noconfirm", "bettercap")
+		cmd2.Stdout = os.Stdout
+		cmd2.Stderr = os.Stderr
+		return cmd2.Run()
+	default:
+		return fmt.Errorf("Sad as molten popsicle.. :( \n"+
+			"Your Linux Distro is not supported. But if you appreciate \n"+
+			"ROck it for me! well enough, you may oppen an issue and, "+
+			"request support for your Distro. :)\n %s", OpSystem)
+	}
+
 }
 
-func checkbettercapDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checkbettercapDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
+}
+
+// getProjectRoot returns the absolute path to the project root directory.
+func getProjectRoot() (string, error) {
+	// Get the current working directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+
+	// Walk up the directory tree until we find the "rockitforme" directory
+	for {
+		if filepath.Base(cwd) == "rockitforme" {
+			return cwd, nil
+		}
+
+		parent := filepath.Dir(cwd)
+		if parent == cwd {
+			// Reached the root directory without finding "rockitforme"
+			return "", fmt.Errorf("project root not found")
+		}
+		cwd = parent
+	}
 }

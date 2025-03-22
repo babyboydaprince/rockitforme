@@ -54,13 +54,8 @@ func installoneshot() error {
 	filePath := "../modules/oneshot.py"
 
 	sourceFilePath := filepath.Join(currentDir, filePath)
-
 	destinationDir := "/usr/local/bin/"
-
-	// Get the base filename from the source file path
 	_, fileName := filepath.Split(sourceFilePath)
-
-	// Create the destination file path
 	destinationFilePath := filepath.Join(destinationDir, fileName)
 
 	cmd := exec.Command("cp", sourceFilePath, destinationFilePath)

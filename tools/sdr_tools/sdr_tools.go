@@ -13,7 +13,7 @@ func SDRTools() {
 SDRToolsMenuLoop:
 	for {
 
-		fmt.Print("\033[H\033[2J") // Clear the console
+		fmt.Print("\033[H\033[2J")
 		banner.BannerSDRTools()
 
 		sdrOptions := common.SingleSelect(
@@ -45,13 +45,13 @@ SDRToolsMenuLoop:
 			goto SDRToolsMenuLoop
 
 		case "Go back":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			break SDRToolsMenuLoop
 
 		case "Exit":
-			fmt.Print("\033[H\033[2J") // Clear the console
+			fmt.Print("\033[H\033[2J")
 			banner.PrintBanner()
 
 			fmt.Println("\nExiting...")

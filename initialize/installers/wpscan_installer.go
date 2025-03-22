@@ -4,32 +4,37 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	_ "rockitforme/utils"
 )
 
 const wpscanCommand = "wpscan"
 
-func WpscanInstall(check string) bool {
+// TODO - EXAMPLE OF DEPENDENCY SET UP
+var wpscanDependencies = map[string][]string{
+	"debian": {"sudo", "ruby"},
+	"fedora": {"sudo", "ruby"},
+	"arch":   {"sudo", "ruby"},
+}
 
+func WpscanInstall(check string, OpSystem string) bool {
 	switch check {
 	case "dependencies":
-		if err := checkwpscanDependencies(); err != nil {
+		deps, ok := wpscanDependencies[OpSystem]
+		if !ok {
+			return false
+		}
+		if err := checkwpscanDependencies(deps); err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 	case "installed":
 		if iswpscanInstalled() {
-			//fmt.Println("wpscan is already installed.")
-
 			return true
-
 		} else {
-			//fmt.Println("Installing wpscan...")
-			if err := installwpscan(); err != nil {
+			if err := installwpscan(OpSystem); err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(1)
 			}
-			//fmt.Println("wpscan installed successfully.")
-
 			return false
 		}
 	default:
@@ -44,22 +49,34 @@ func iswpscanInstalled() bool {
 	return err == nil
 }
 
-func installwpscan() error {
-	cmd := exec.Command("sudo", "apt", "install", "wpscan", "-y")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func installwpscan(OpSystem string) error {
+	switch OpSystem {
+	case "debian":
+		cmd := exec.Command("sudo", "apt", "install", "wpscan", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "wpscan", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	case "arch":
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "wpscan")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	default:
+		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
 }
 
-func checkwpscanDependencies() error {
-	dependencies := []string{"sudo"}
-
+func checkwpscanDependencies(dependencies []string) error {
 	for _, dep := range dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
 			return fmt.Errorf("dependency not found: %s", dep)
 		}
 	}
-
 	return nil
 }

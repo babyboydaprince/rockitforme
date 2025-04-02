@@ -4,29 +4,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	_ "rockitforme/utils"
 )
 
-const nfctoolsCommand = "nfc-scan-device"
-
-// TODO - EXAMPLE OF DEPENDENCY SET UP
-var nfcToolsDependencies = map[string][]string{
-	"debian": {"sudo", "ruby"},
-	"fedora": {"sudo", "ruby"},
-	"arch":   {"sudo", "ruby"},
-}
+const nfctoolsCommand = "nfc-list"
 
 func NfcToolsInstall(check string, OpSystem string) bool {
 	switch check {
-	case "dependencies":
-		deps, ok := nfcToolsDependencies[OpSystem]
-		if !ok {
-			return false
-		}
-		if err := checknfctoolsDependencies(deps); err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
-		}
 	case "installed":
 		if isnfctoolsInstalled() {
 			return true
@@ -50,6 +35,14 @@ func isnfctoolsInstalled() bool {
 }
 
 func installnfctools(OpSystem string) error {
+	projectRoot, err := getProjectRootFolder()
+	if err != nil {
+		return fmt.Errorf("error getting project root: %w", err)
+	}
+
+	nfctoolsdModulesPath := filepath.Join(projectRoot, "initialize", "installers",
+		"modules", "libnfc")
+
 	switch OpSystem {
 	case "debian":
 		cmd := exec.Command("sudo", "apt", "install", "nfctools", "-y")
@@ -71,12 +64,19 @@ func installnfctools(OpSystem string) error {
 	}
 }
 
-func checknfctoolsDependencies(dependencies []string) error {
-	for _, dep := range dependencies {
-		_, err := exec.LookPath(dep)
-		if err != nil {
-			return fmt.Errorf("dependency not found: %s", dep)
-		}
+func getProjectRootFolder() (string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
 	}
-	return nil
+	for {
+		if filepath.Base(cwd) == "rockitforme" {
+			return cwd, nil
+		}
+		parent := filepath.Dir(cwd)
+		if parent == cwd {
+			return "", fmt.Errorf("project root not found")
+		}
+		cwd = parent
+	}
 }

@@ -135,24 +135,24 @@ func checkAppsInstalled(OpSystem string) {
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
-	
-	installers.PyritInstall("installed", OpSystem)
-	fmt.Printf("\r%s pyrit.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
 
-	installers.HcxdumptoolInstall("installed", OpSystem)
-	fmt.Printf("\r%s hcxdumptool.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	//installers.PyritInstall("installed", OpSystem)
+	//fmt.Printf("\r%s pyrit.....", "")
+	//color.Green("OK")
+	//fmt.Println()
+	//time.Sleep(500 * time.Millisecond)
 
-	installers.HcxpcaptoolInstall("installed", OpSystem)
-	fmt.Printf("\r%s hcxpcaptool.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	//installers.HcxdumptoolInstall("installed", OpSystem)
+	//fmt.Printf("\r%s hcxdumptool.....", "")
+	//color.Green("OK")
+	//fmt.Println()
+	//time.Sleep(500 * time.Millisecond)
+	//
+	//installers.HcxpcaptoolInstall("installed", OpSystem)
+	//fmt.Printf("\r%s hcxpcaptool.....", "")
+	//color.Green("OK")
+	//fmt.Println()
+	//time.Sleep(500 * time.Millisecond)
 
 	installers.NfcToolsInstall("installed", OpSystem)
 	fmt.Printf("\r%s NFC-TOOLS.....", "")
@@ -179,11 +179,11 @@ func checkAppsInstalled(OpSystem string) {
 	time.Sleep(500 * time.Millisecond)
 
 	// TODO - DEPENDENCY CHECK needs WIFITE setup
-	installers.WifiteInstall("installed", OpSystem)
-	fmt.Printf("\r%s Wifite.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	//installers.WifiteInstall("installed", OpSystem)
+	//fmt.Printf("\r%s Wifite.....", "")
+	//color.Green("OK")
+	//fmt.Println()
+	//time.Sleep(500 * time.Millisecond)
 
 	// TODO - DEPENDENCY CHECK needs WIFITE setup
 	installers.AirgeddonInstall("installed", OpSystem)

@@ -51,13 +51,11 @@ func isbettercapInstalled() bool {
 }
 
 func installbettercap(OpSystem string) error {
-	// Get the absolute path to the project root
 	projectRoot, err := getProjectRoot()
 	if err != nil {
 		return fmt.Errorf("error getting project root: %w", err)
 	}
 
-	// Construct the absolute path to the bettercap modules directory
 	bettercapModulesPath := filepath.Join(projectRoot, "initialize", "installers", "modules", "bettercap")
 
 	switch OpSystem {
@@ -83,10 +81,9 @@ func installbettercap(OpSystem string) error {
 			return err
 		}
 
-		// Check if the bettercap directory already exists
 		if _, err := os.Stat(bettercapModulesPath); os.IsNotExist(err) {
-			// Clone the repository if it doesn't exist
-			getRepo := exec.Command("git", "clone", "https://github.com/bettercap/bettercap.git", bettercapModulesPath)
+			getRepo := exec.Command("git", "clone",
+				"https://github.com/bettercap/bettercap.git", bettercapModulesPath)
 			getRepo.Stdout = os.Stdout
 			getRepo.Stderr = os.Stderr
 			err = getRepo.Run()
@@ -97,9 +94,8 @@ func installbettercap(OpSystem string) error {
 			return fmt.Errorf("error checking bettercap directory: %w", err)
 		}
 
-		// Build and install bettercap
 		buildTool := exec.Command("make", "build")
-		buildTool.Dir = bettercapModulesPath // Set the working directory
+		buildTool.Dir = bettercapModulesPath
 		buildTool.Stdout = os.Stdout
 		buildTool.Stderr = os.Stderr
 		err = buildTool.Run()
@@ -108,7 +104,7 @@ func installbettercap(OpSystem string) error {
 		}
 
 		installTool := exec.Command("sudo", "make", "install")
-		installTool.Dir = bettercapModulesPath // Set the working directory
+		installTool.Dir = bettercapModulesPath
 		installTool.Stdout = os.Stdout
 		installTool.Stderr = os.Stderr
 		err = installTool.Run()
@@ -149,15 +145,12 @@ func checkbettercapDependencies(dependencies []string) error {
 	return nil
 }
 
-// getProjectRoot returns the absolute path to the project root directory.
 func getProjectRoot() (string, error) {
-	// Get the current working directory
 	cwd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
-	// Walk up the directory tree until we find the "rockitforme" directory
 	for {
 		if filepath.Base(cwd) == "rockitforme" {
 			return cwd, nil
@@ -165,7 +158,6 @@ func getProjectRoot() (string, error) {
 
 		parent := filepath.Dir(cwd)
 		if parent == cwd {
-			// Reached the root directory without finding "rockitforme"
 			return "", fmt.Errorf("project root not found")
 		}
 		cwd = parent

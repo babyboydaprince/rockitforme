@@ -52,20 +52,32 @@ func isTsharkInstalled() bool {
 func installTshark(OpSystem string) error {
 	switch OpSystem {
 	case "debian":
-		cmd := exec.Command("sudo", "apt", "install", "wireless-tools", "-y")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
-	//case "fedora":
-	//	cmd := exec.Command("sudo", "dnf", "install", "wireless-tools", "-y")
-	//	cmd.Stdout = os.Stdout
-	//	cmd.Stderr = os.Stderr
-	//	return cmd.Run()
+		setupTshark := exec.Command("sudo", "apt", "install", "tshark", "-y")
+		setupTshark.Stdout = os.Stdout
+		setupTshark.Stderr = os.Stderr
+		err := setupTshark.Run()
+		if err != nil {
+			return fmt.Errorf("error installing tshark: %w", err)
+		}
+		return nil
+	case "fedora":
+		setupTshark := exec.Command("sudo", "dnf", "install", "tshark", "-y")
+		setupTshark.Stdout = os.Stdout
+		setupTshark.Stderr = os.Stderr
+		err := setupTshark.Run()
+		if err != nil {
+			return fmt.Errorf("error installing tshark: %w", err)
+		}
+		return nil
 	case "arch":
-		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "wireless_tools")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+		setupTshark := exec.Command("sudo", "pacman", "-S", "--noconfirm", "tshark")
+		setupTshark.Stdout = os.Stdout
+		setupTshark.Stderr = os.Stderr
+		err := setupTshark.Run()
+		if err != nil {
+			return fmt.Errorf("error installing tshark: %w", err)
+		}
+		return nil
 	default:
 		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
 	}

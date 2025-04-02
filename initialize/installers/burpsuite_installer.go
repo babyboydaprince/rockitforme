@@ -7,26 +7,10 @@ import (
 	_ "rockitforme/utils"
 )
 
-const burpsuiteCommand = "burpsuite"
-
-// TODO - EXAMPLE OF DEPENDENCY SET UP
-var burpsuiteDependencies = map[string][]string{
-	"debian": {"sudo", "ruby"},
-	"fedora": {"sudo", "ruby"},
-	"arch":   {"sudo", "ruby"},
-}
+const burpsuiteCommand = "BurpSuiteCommunity"
 
 func BurpsuiteInstall(check string, OpSystem string) bool {
 	switch check {
-	case "dependencies":
-		deps, ok := burpsuiteDependencies[OpSystem]
-		if !ok {
-			return false
-		}
-		if err := checkburpsuiteDependencies(deps); err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
-		}
 	case "installed":
 		if isburpsuiteInstalled() {
 			return true
@@ -52,31 +36,96 @@ func isburpsuiteInstalled() bool {
 func installburpsuite(OpSystem string) error {
 	switch OpSystem {
 	case "debian":
-		cmd := exec.Command("sudo", "apt", "install", "burpsuite", "-y")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+		getBurp := exec.Command("wget", "-O",
+			"/home/$USER/Burpsuite_2025_1_5.sh",
+			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
+		getBurp.Stdout = os.Stdout
+		getBurp.Stderr = os.Stderr
+		err := getBurp.Run()
+		if err != nil {
+			return err
+		}
+
+		setExecPermission := exec.Command("chmod", "+x",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setExecPermission.Stdout = os.Stdout
+		setExecPermission.Stderr = os.Stderr
+		permitErr := setExecPermission.Run()
+		if permitErr != nil {
+			return permitErr
+		}
+
+		setUpBurp := exec.Command("sudo", "bash",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setUpBurp.Stdout = os.Stdout
+		setUpBurp.Stderr = os.Stderr
+		setUpErr := setUpBurp.Run()
+		if setUpErr != nil {
+			return setUpErr
+		}
+
+		return setUpBurp.Run()
 	case "fedora":
-		cmd := exec.Command("sudo", "dnf", "install", "burpsuite", "-y")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+		getBurp := exec.Command("wget", "-O",
+			"/home/$USER/Burpsuite_2025_1_5.sh",
+			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
+		getBurp.Stdout = os.Stdout
+		getBurp.Stderr = os.Stderr
+		err := getBurp.Run()
+		if err != nil {
+			return err
+		}
+
+		setExecPermission := exec.Command("chmod", "+x",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setExecPermission.Stdout = os.Stdout
+		setExecPermission.Stderr = os.Stderr
+		permitErr := setExecPermission.Run()
+		if permitErr != nil {
+			return permitErr
+		}
+
+		setUpBurp := exec.Command("sudo", "bash",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setUpBurp.Stdout = os.Stdout
+		setUpBurp.Stderr = os.Stderr
+		setUpErr := setUpBurp.Run()
+		if setUpErr != nil {
+			return setUpErr
+		}
+
+		return setUpBurp.Run()
 	case "arch":
-		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "burpsuite")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+		getBurp := exec.Command("wget", "-O",
+			"/home/$USER/Burpsuite_2025_1_5.sh",
+			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
+		getBurp.Stdout = os.Stdout
+		getBurp.Stderr = os.Stderr
+		err := getBurp.Run()
+		if err != nil {
+			return err
+		}
+
+		setExecPermission := exec.Command("chmod", "+x",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setExecPermission.Stdout = os.Stdout
+		setExecPermission.Stderr = os.Stderr
+		permitErr := setExecPermission.Run()
+		if permitErr != nil {
+			return permitErr
+		}
+
+		setUpBurp := exec.Command("sudo", "bash",
+			"/home/$USER/Burpsuite_2025_1_5.sh")
+		setUpBurp.Stdout = os.Stdout
+		setUpBurp.Stderr = os.Stderr
+		setUpErr := setUpBurp.Run()
+		if setUpErr != nil {
+			return setUpErr
+		}
+
+		return setUpBurp.Run()
 	default:
 		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
 	}
-}
-
-func checkburpsuiteDependencies(dependencies []string) error {
-	for _, dep := range dependencies {
-		_, err := exec.LookPath(dep)
-		if err != nil {
-			return fmt.Errorf("dependency not found: %s", dep)
-		}
-	}
-	return nil
 }

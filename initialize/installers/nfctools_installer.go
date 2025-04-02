@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	_ "rockitforme/utils"
 )
 
@@ -35,13 +34,13 @@ func isnfctoolsInstalled() bool {
 }
 
 func installnfctools(OpSystem string) error {
-	projectRoot, err := getProjectRootFolder()
-	if err != nil {
-		return fmt.Errorf("error getting project root: %w", err)
-	}
+	//projectRoot, err := getProjectRootFolder()
+	//if err != nil {
+	//	return fmt.Errorf("error getting project root: %w", err)
+	//}
 
-	nfctoolsdModulesPath := filepath.Join(projectRoot, "initialize", "installers",
-		"modules", "libnfc")
+	//nfctoolsdModulesPath := filepath.Join(projectRoot, "initialize", "installers",
+	//	"modules", "libnfc")
 
 	switch OpSystem {
 	case "debian":
@@ -64,19 +63,20 @@ func installnfctools(OpSystem string) error {
 	}
 }
 
-func getProjectRootFolder() (string, error) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	for {
-		if filepath.Base(cwd) == "rockitforme" {
-			return cwd, nil
-		}
-		parent := filepath.Dir(cwd)
-		if parent == cwd {
-			return "", fmt.Errorf("project root not found")
-		}
-		cwd = parent
-	}
-}
+//
+//func getProjectRootFolder() (string, error) {
+//	cwd, err := os.Getwd()
+//	if err != nil {
+//		return "", err
+//	}
+//	for {
+//		if filepath.Base(cwd) == "rockitforme" {
+//			return cwd, nil
+//		}
+//		parent := filepath.Dir(cwd)
+//		if parent == cwd {
+//			return "", fmt.Errorf("project root not found")
+//		}
+//		cwd = parent
+//	}
+//}

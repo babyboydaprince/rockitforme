@@ -97,7 +97,7 @@ func installburpsuite(OpSystem string) error {
 		return setUpBurp.Run()
 	case "arch":
 		getBurp := exec.Command("wget", "-O",
-			"/home/$USER/Burpsuite_2025_1_5.sh",
+			"/home/", "$USER", "/Burpsuite_2025_1_5.sh",
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
@@ -107,7 +107,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setExecPermission := exec.Command("chmod", "+x",
-			"/home/$USER/Burpsuite_2025_1_5.sh")
+			"/home/", "$USER", "/Burpsuite_2025_1_5.sh")
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -116,7 +116,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setUpBurp := exec.Command("sudo", "bash",
-			"/home/$USER/Burpsuite_2025_1_5.sh")
+			"/home/", "$USER", "/Burpsuite_2025_1_5.sh")
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()

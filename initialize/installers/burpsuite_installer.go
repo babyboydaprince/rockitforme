@@ -97,14 +97,17 @@ func installburpsuite(OpSystem string) error {
 
 		return setUpBurp.Run()
 	case "arch":
-		homeDir, _ := os.UserHomeDir()
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			return err
+		}
 		downloadPath := filepath.Join(homeDir, "Downloads", "Burpsuite_2025_1_5.sh")
 		getBurp := exec.Command("wget", "-O",
 			downloadPath,
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
-		err := getBurp.Run()
+		err = getBurp.Run()
 		if err != nil {
 			return err
 		}

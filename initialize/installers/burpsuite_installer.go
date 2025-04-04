@@ -128,7 +128,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setExecPermission := exec.Command("chmod", "+x",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+			filepath.Join(burpModulesPath, "Burpsuite_2025_1_5.sh"))
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -137,7 +137,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setUpBurp := exec.Command("sudo", "bash",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+			filepath.Join(burpModulesPath, "Burpsuite_2025_1_5.sh"))
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()

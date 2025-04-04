@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	_ "rockitforme/utils"
 )
@@ -97,10 +98,11 @@ func installburpsuite(OpSystem string) error {
 
 		return setUpBurp.Run()
 	case "arch":
-		homeDir, err := os.UserHomeDir()
+		currentUser, err := user.Current()
 		if err != nil {
 			return err
 		}
+		homeDir := currentUser.HomeDir
 		downloadPath := filepath.Join(homeDir, "Downloads", "Burpsuite_2025_1_5.sh")
 		getBurp := exec.Command("wget", "-O",
 			downloadPath,

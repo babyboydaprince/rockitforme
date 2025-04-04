@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	_ "rockitforme/utils"
 )
 
@@ -96,8 +97,10 @@ func installburpsuite(OpSystem string) error {
 
 		return setUpBurp.Run()
 	case "arch":
+		homeDir, _ := os.UserHomeDir()
+		downloadPath := filepath.Join(homeDir, "Downloads", "Burpsuite_2025_1_5.sh")
 		getBurp := exec.Command("wget", "-O",
-			"~/Downloads/Burpsuite_2025_1_5.sh",
+			downloadPath,
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
@@ -107,7 +110,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setExecPermission := exec.Command("chmod", "+x",
-			"~/Downloads/Burpsuite_2025_1_5.sh")
+			downloadPath)
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -116,7 +119,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setUpBurp := exec.Command("sudo", "bash",
-			"~/Downloads/Burpsuite_2025_1_5.sh")
+			downloadPath)
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()

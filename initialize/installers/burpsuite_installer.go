@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/user"
 	"path/filepath"
 	_ "rockitforme/utils"
 )
@@ -98,14 +97,28 @@ func installburpsuite(OpSystem string) error {
 
 		return setUpBurp.Run()
 	case "arch":
-		currentUser, err := user.Current()
+		projectRoot, err := getProjectMainDir()
 		if err != nil {
-			return err
+			return fmt.Errorf("error getting project root: %w", err)
 		}
-		homeDir := currentUser.HomeDir
-		downloadPath := filepath.Join(homeDir, "Downloads", "Burpsuite_2025_1_5.sh")
+
+		burpModulesPath := filepath.Join(projectRoot, "initialize", "installers", "modules", "burpsuite")
+
+		if _, err := os.Stat(burpModulesPath); os.IsNotExist(err) {
+			preparePath := exec.Command("mkdir", "-p",
+				burpModulesPath)
+			preparePath.Stdout = os.Stdout
+			preparePath.Stderr = os.Stderr
+			err = preparePath.Run()
+			if err != nil {
+				return fmt.Errorf("error making burpsuite module directory: %w", err)
+			}
+		} else if err != nil {
+			return fmt.Errorf("error checking burpsuite module directory: %w", err)
+		}
+
 		getBurp := exec.Command("wget", "-O",
-			downloadPath,
+			filepath.Join(burpModulesPath, "Burpsuite_2025_1_5.sh"),
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
@@ -115,7 +128,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setExecPermission := exec.Command("chmod", "+x",
-			downloadPath)
+			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -124,7 +137,7 @@ func installburpsuite(OpSystem string) error {
 		}
 
 		setUpBurp := exec.Command("sudo", "bash",
-			downloadPath)
+			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()
@@ -135,5 +148,24 @@ func installburpsuite(OpSystem string) error {
 		return setUpBurp.Run()
 	default:
 		return fmt.Errorf("unsupported Linux distribution: %s", OpSystem)
+	}
+}
+
+func getProjectMainDir() (string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+
+	for {
+		if filepath.Base(cwd) == "rockitforme" {
+			return cwd, nil
+		}
+
+		parent := filepath.Dir(cwd)
+		if parent == cwd {
+			return "", fmt.Errorf("project root not found")
+		}
+		cwd = parent
 	}
 }

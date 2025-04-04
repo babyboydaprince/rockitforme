@@ -8,12 +8,11 @@ import (
 	_ "rockitforme/utils"
 )
 
-const burpsuiteCommand = "BurpSuiteCommunity"
-
 func BurpsuiteInstall(check string, OpSystem string) bool {
 	switch check {
 	case "installed":
-		if isburpsuiteInstalled() {
+		burpsuiteCommand := []string{"BurpSuiteCommunity", "burpsuite"}
+		if isburpsuiteInstalled(burpsuiteCommand) {
 			return true
 		} else {
 			if err := installburpsuite(OpSystem); err != nil {
@@ -29,9 +28,16 @@ func BurpsuiteInstall(check string, OpSystem string) bool {
 	return false
 }
 
-func isburpsuiteInstalled() bool {
-	_, err := exec.LookPath(burpsuiteCommand)
-	return err == nil
+func isburpsuiteInstalled(burpCmdList []string) bool {
+	for _, burpCommand := range burpCmdList {
+		_, err := exec.LookPath(burpCommand)
+		if err != nil {
+			return false
+		} else {
+			return true
+		}
+	}
+	return false
 }
 
 func installburpsuite(OpSystem string) error {

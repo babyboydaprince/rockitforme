@@ -12,7 +12,10 @@ func BurpsuiteInstall(check string, OpSystem string) bool {
 	switch check {
 	case "installed":
 		burpsuiteCommand := []string{"BurpSuiteCommunity", "burpsuite"}
-		if isburpsuiteInstalled(burpsuiteCommand) {
+		returnedCmd := isburpsuiteInstalled(burpsuiteCommand)
+		if returnedCmd[0] == true {
+			return true
+		} else if returnedCmd[1] == true {
 			return true
 		} else {
 			if err := installburpsuite(OpSystem); err != nil {
@@ -28,23 +31,46 @@ func BurpsuiteInstall(check string, OpSystem string) bool {
 	return false
 }
 
-func isburpsuiteInstalled(burpCmdList []string) bool {
+func isburpsuiteInstalled(burpCmdList []string) []bool {
+	var burpCmdReturn []bool
+
 	for _, burpCommand := range burpCmdList {
 		_, err := exec.LookPath(burpCommand)
 		if err != nil {
-			return false
+			burpCmdReturn = append(burpCmdReturn, false)
 		} else {
-			return true
+			burpCmdReturn = append(burpCmdReturn, true)
 		}
 	}
-	return false
+	return burpCmdReturn
 }
 
 func installburpsuite(OpSystem string) error {
+	projectRoot, err := getProjectRoot()
+	if err != nil {
+		return fmt.Errorf("error getting project root: %w", err)
+	}
+
+	burpInstallerPath := filepath.Join(projectRoot, "initialize", "installers", "modules", "burpsuite")
+
+	if _, err := os.Stat(burpInstallerPath); os.IsNotExist(err) {
+		preparePath := exec.Command("mkdir", "-p", burpInstallerPath)
+		preparePath.Stdout = os.Stdout
+		preparePath.Stderr = os.Stderr
+		err = preparePath.Run()
+		if err != nil {
+			return fmt.Errorf("error making burpsuite module directory: %w", err)
+		}
+	} else if err != nil {
+		return fmt.Errorf("error checking burpsuite module directory: %w", err)
+	}
+
 	switch OpSystem {
+
 	case "debian":
-		getBurp := exec.Command("wget", "-O",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh",
+
+		getBurp := exec.Command("wget", "-O", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh",
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
@@ -53,8 +79,8 @@ func installburpsuite(OpSystem string) error {
 			return err
 		}
 
-		setExecPermission := exec.Command("chmod", "+x",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+		setExecPermission := exec.Command("chmod", "+x", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh")
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -62,8 +88,8 @@ func installburpsuite(OpSystem string) error {
 			return permitErr
 		}
 
-		setUpBurp := exec.Command("sudo", "bash",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+		setUpBurp := exec.Command("sudo", "bash", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh")
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()

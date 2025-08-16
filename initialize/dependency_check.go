@@ -6,7 +6,6 @@ import (
 	"rockitforme/initialize/installers"
 	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 )
 
@@ -24,15 +23,15 @@ func CheckForDependencies(OpSystem string) {
 	color.Yellow("\nStarting dependency check:\n\n")
 	fmt.Println()
 
-	checkDependencies()
+	// checkDependencies()
 
 }
 
 func checkDependencies() {
-	s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
-	s.Start()
+	// s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
+	// s.Start()
 	time.Sleep(3 * time.Second)
-	s.Stop()
+	// s.Stop()
 
 	fmt.Print("Dependencies installed.....")
 	color.Green("OK")
@@ -41,9 +40,9 @@ func checkDependencies() {
 }
 
 func checkAppsInstalled(OpSystem string) {
-	s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
+	// s := spinner.New(spinner.CharSets[15], 50*time.Millisecond)
 
-	s.Start()
+	// s.Start()
 	time.Sleep(500 * time.Millisecond)
 	installers.NmapInstall("installed", OpSystem)
 	fmt.Printf("\r%s NMAP.....", "")
@@ -187,7 +186,7 @@ func checkAppsInstalled(OpSystem string) {
 
 	// TODO - DEPENDENCY CHECK needs WIFITE setup
 	installers.AirgeddonInstall("installed", OpSystem)
-	s.Stop()
+	// s.Stop()
 	fmt.Printf("\r%s Airgeddon.....", "")
 	color.Green("OK")
 	fmt.Println()

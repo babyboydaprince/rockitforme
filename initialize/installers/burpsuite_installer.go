@@ -99,8 +99,8 @@ func installburpsuite(OpSystem string) error {
 
 		return setUpBurp.Run()
 	case "fedora":
-		getBurp := exec.Command("wget", "-O",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh",
+		getBurp := exec.Command("wget", "-O", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh",
 			"https://portswigger-cdn.net/burp/releases/download?product=community&version=2025.1.5&type=Linux")
 		getBurp.Stdout = os.Stdout
 		getBurp.Stderr = os.Stderr
@@ -109,8 +109,8 @@ func installburpsuite(OpSystem string) error {
 			return err
 		}
 
-		setExecPermission := exec.Command("chmod", "+x",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+		setExecPermission := exec.Command("chmod", "+x", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh")
 		setExecPermission.Stdout = os.Stdout
 		setExecPermission.Stderr = os.Stderr
 		permitErr := setExecPermission.Run()
@@ -118,8 +118,8 @@ func installburpsuite(OpSystem string) error {
 			return permitErr
 		}
 
-		setUpBurp := exec.Command("sudo", "bash",
-			"/home/$USER/Downloads/Burpsuite_2025_1_5.sh")
+		setUpBurp := exec.Command("sudo", "bash", burpInstallerPath+
+			"/Burpsuite_2025_1_5.sh")
 		setUpBurp.Stdout = os.Stdout
 		setUpBurp.Stderr = os.Stderr
 		setUpErr := setUpBurp.Run()

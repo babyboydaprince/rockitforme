@@ -3,8 +3,8 @@
 Rock it for me is a framework made for Cybersecurity professionals with the
 intent of simplifying daily work operations.<br>
 
-<b><span style="color: red;">Rock it </span></b>
-<b><span style="color: blue;">For me</span> toolset currently packs</b>:
+<b><span style="color:red;">Rock it </span></b>
+<b><span style="color:blue;">For me</span> toolset currently packs</b>:
 
 - Networking tools;
 - Wireless tools;
@@ -37,7 +37,7 @@ In case you compiled the binary, you can just:
 ---
 ### 📋 Prerequisites
 
-- Golang 1.20+
+- Golang 1.22+
 ---
 ### 📋 Compatibility & Considerations
 
@@ -47,43 +47,28 @@ In case you compiled the binary, you can just:
 ---
 ### 🔧 Installation
 
-- Golang 1.21+ --> [Official download page](https://go.dev/doc/install);
+- Golang 1.22+ --> [Official download page](https://go.dev/doc/install);
 - libpcap;
 
 Installing libpcap:
-```
--- FEDORA --
+#### Fedora
+```bash
 sudo dnf install libpcap-devel
 ```
-
-```
--- UBUNTU --
+#### Ubuntu / Debian
+```bash
 sudo apt install libpcap-dev
 ```
-
-```
--- DEBIAN --
-sudo apt install libpcap-dev
-```
-
-```
--- ARCH --
+#### Arch
+```bash
 sudo pacman -S libpcap
 ```
-```
--- WINDOWS --
-comming soon...
-```
-```
--- Mac OS --
-comming soon...
-```
-```
--- Android devices --
-   (Root required)
-
-comming soon...
-```
+#### Windows
+*coming soon...*
+#### Mac OS
+*coming soon...*
+#### Android devices (Root required)
+*coming soon...*
 
 ---
 
@@ -91,10 +76,10 @@ comming soon...
 
 
 <b>1.</b> Dependency auto installer module upgrade:<br>
-[<b><span style="color :green;">+</style></span></b>] Will also include <b>Golang</b> and <b>libpcap</b>;
+[<b><span style="color:green;">+</span></b>] Will also include <b>Golang</b> and <b>libpcap</b>;
 
 <b>2.</b> Stabilize Cross compatibility expansion:<br>
-[<b><span style="color :green;">+</style></span></b>] Included operating sytems:
+[<b><span style="color:green;">+</span></b>] Included operating sytems:
 - <b>Fedora</b>;
 - <b>Debian</b>;
 - <b>Ubuntu</b>;
@@ -104,7 +89,7 @@ comming soon...
 - <b>Android devices</b> (Root required)
 
 <b>3. </b>Integration with new powerful tools:<br>
-[<b><span style="color :green;">+</style></span></b>] Sit tight and enjoy the ride 🔨👷
+[<b><span style="color:green;">+</span></b>] Sit tight and enjoy the ride 🔨👷
 
 ---
 ## 📝 Credits, mentions, inspirations
@@ -120,4 +105,3 @@ It also contains tools I designed, and will have more of them.
 When the first stable release comes I will leave here all my inspirations for this project.
 
 ⌨️ Made with ❤️ by [BraiNiac](https://github.com/babyboydaprince) 👽
-

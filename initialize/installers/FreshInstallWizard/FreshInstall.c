@@ -68,8 +68,8 @@ int main() {
     detect_distro(distro, sizeof(distro));
 
     run_cmd("clear");
-    printf("📦 Rock It For Me! Fresh install has just begun.\nSit back and relax.\n");
-    printf("📦 Detected distribution: %s\n", distro);
+    printf("\n🔄 Rock It For Me! Fresh install has just begun.");
+    printf("\n📦 Detected distribution: %s\n", distro);
     printf("⚡ Fresh Install requires sudo privileges.\n");
 
     if (strcmp(distro, "ubuntu") == 0 || strcmp(distro, "debian") == 0) {

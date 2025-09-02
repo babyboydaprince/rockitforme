@@ -33,7 +33,7 @@ void detect_distro(char *distro, size_t size) {
 
 // Function to run a system command and check return code
 void run_cmd(const char *cmd) {
-    printf("➡️ Running: %s\n", cmd);
+    printf("\n\n➡️ Running: %s\n", cmd, "\n");
     int ret = system(cmd);
     if (ret != 0) {
         fprintf(stderr, "❌ Command failed: %s\n", cmd);
@@ -43,8 +43,6 @@ void run_cmd(const char *cmd) {
 
 // Run a command and stream stdout/stderr in real time
 void run_cmd_stream(const char *cmd) {
-    printf("➡️ Building Rock it For Me...");
-
     FILE *fp = popen(cmd, "r");
     if (!fp) {
         fprintf(stderr, "❌ Failed to run command: %s\n", cmd);
@@ -101,13 +99,15 @@ int main() {
     // Change directory into ./rockitforme inside project root
     if (chdir(cwd) != 0) {
         perror("❌ Failed to change directory to ./rockitforme");
+        printf("The given path: \n", cwd);
         exit(1);
     }
 
     // Run the Go build command and show output
+    printf("➡️ Building Rock it For Me...");
     run_cmd_stream("go build rockitforme");
     // run_cmd("clear");
-    printf("\n✅ Rock It For Me! has been built successfully 🎉\n");
+    printf("\n\n✅ Rock It For Me! has been built successfully!\n");
 
     // Keep the original next-steps block but commented out
     /*

@@ -43,7 +43,7 @@ void run_cmd(const char *cmd) {
 
 // Run a command and stream stdout/stderr in real time
 void run_cmd_stream(const char *cmd) {
-    printf("➡️ Building Rock it For Me...: %s\n\n", cmd);
+    printf("➡️ Building Rock it For Me...");
 
     FILE *fp = popen(cmd, "r");
     if (!fp) {
@@ -67,8 +67,10 @@ int main() {
     char distro[64];
     detect_distro(distro, sizeof(distro));
 
+    run_cmd("clear");
+    printf("📦 Rock It For Me! Fresh install has just begun.\nSit back and relax.\n");
     printf("📦 Detected distribution: %s\n", distro);
-    printf("⚡ This script requires sudo privileges.\n");
+    printf("⚡ Fresh Install requires sudo privileges.\n");
 
     if (strcmp(distro, "ubuntu") == 0 || strcmp(distro, "debian") == 0) {
         run_cmd("sudo apt update");
@@ -94,7 +96,7 @@ int main() {
         perror("❌ Failed to get current working directory");
         exit(1);
     }
-    printf("📂 Project root detected: %s\n", cwd);
+    printf("\n📂 Project root detected: %s\n", cwd);
 
     // Change directory into ./rockitforme inside project root
     if (chdir(cwd) != 0) {
@@ -104,7 +106,7 @@ int main() {
 
     // Run the Go build command and show output
     run_cmd_stream("go build rockitforme");
-
+    // run_cmd("clear");
     printf("\n✅ Rock It For Me! has been built successfully 🎉\n");
 
     // Keep the original next-steps block but commented out

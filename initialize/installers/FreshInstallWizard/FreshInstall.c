@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <limits.h>
 
 // Function to check distro from /etc/os-release
 void detect_distro(char *distro, size_t size) {
@@ -39,6 +41,28 @@ void run_cmd(const char *cmd) {
     }
 }
 
+// Run a command and stream stdout/stderr in real time
+void run_cmd_stream(const char *cmd) {
+    printf("➡️ Building Rock it For Me...: %s\n\n", cmd);
+
+    FILE *fp = popen(cmd, "r");
+    if (!fp) {
+        fprintf(stderr, "❌ Failed to run command: %s\n", cmd);
+        exit(1);
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+        printf("%s", buffer); // forward output to stdout
+    }
+
+    int ret = pclose(fp);
+    if (ret != 0) {
+        fprintf(stderr, "❌ Build command failed: %s\n", cmd);
+        exit(1);
+    }
+}
+
 int main() {
     char distro[64];
     detect_distro(distro, sizeof(distro));
@@ -64,7 +88,27 @@ int main() {
         return 1;
     }
 
-    printf("\n✅ Installation completed successfully!\n");
+    // Get project root = current working directory
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+        perror("❌ Failed to get current working directory");
+        exit(1);
+    }
+    printf("📂 Project root detected: %s\n", cwd);
+
+    // Change directory into ./rockitforme inside project root
+    if (chdir(cwd) != 0) {
+        perror("❌ Failed to change directory to ./rockitforme");
+        exit(1);
+    }
+
+    // Run the Go build command and show output
+    run_cmd_stream("go build rockitforme");
+
+    printf("\n✅ Rock It For Me! has been built successfully 🎉\n");
+
+    // Keep the original next-steps block but commented out
+    /*
     printf("--------------------------------------------------\n");
     printf("Now you can run Rock It For Me using:\n");
     printf("   ➜ sudo go run main.go\n");
@@ -72,6 +116,7 @@ int main() {
     printf("   ➜ go build rockitforme\n");
     printf("   (on project root directory)\n");
     printf("--------------------------------------------------\n");
+    */
 
     printf("\nHit ENTER to exit...");
     getchar();

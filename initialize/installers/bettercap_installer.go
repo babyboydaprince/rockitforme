@@ -10,7 +10,6 @@ import (
 
 const bettercapCommand = "bettercap"
 
-// TODO - BETTERCAP, para libs usar WICH e extrair stdout
 var bettercapDependencies = map[string][]string{
 	"debian": {"which", "libusb-1.0-0-dev"},
 	"fedora": {"which", "libusb1-devel"},

@@ -99,11 +99,11 @@ func checkAppsInstalled(OpSystem string) {
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.GqrxInstall("installed", OpSystem)
-	fmt.Printf("\r%s GQRX.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	// installers.GqrxInstall("installed", OpSystem)
+	// fmt.Printf("\r%s GQRX.....", "")
+	// color.Green("OK")
+	// fmt.Println()
+	// time.Sleep(500 * time.Millisecond)
 
 	installers.TsharkInstall("installed", OpSystem)
 	fmt.Printf("\r%s iwconfig.....", "")

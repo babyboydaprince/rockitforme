@@ -56,11 +56,11 @@ func installGqrx(OpSystem string) error {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
-	case "fedora":
-		cmd := exec.Command("sudo", "dnf", "install", "gqrx-sdr", "-y")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
+	// case "fedora":
+	// 	cmd := exec.Command("sudo", "dnf", "install", "gqrx-sdr", "-y")
+	// 	cmd.Stdout = os.Stdout
+	// 	cmd.Stderr = os.Stderr
+	// 	return cmd.Run()
 	case "arch":
 		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "gqrx-sdr")
 		cmd.Stdout = os.Stdout

@@ -56,11 +56,11 @@ func installReaver(OpSystem string) error {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
-	//case "fedora":
-	//	cmd := exec.Command("sudo", "dnf", "install", "reaver", "-y")
-	//	cmd.Stdout = os.Stdout
-	//	cmd.Stderr = os.Stderr
-	//	return cmd.Run()
+	case "fedora":
+		cmd := exec.Command("sudo", "dnf", "install", "reaver", "-y")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
 	case "arch":
 		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "reaver")
 		cmd.Stdout = os.Stdout

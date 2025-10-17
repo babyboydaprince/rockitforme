@@ -44,17 +44,18 @@ func installnfctools(OpSystem string) error {
 
 	switch OpSystem {
 	case "debian":
-		cmd := exec.Command("sudo", "apt", "install", "nfctools", "-y")
+		cmd := exec.Command("sudo", "apt", "install", "libnfc", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
 	case "fedora":
-		cmd := exec.Command("sudo", "dnf", "install", "nfctools", "-y")
+		cmd := exec.Command("sudo", "dnf", "install", "libnfc", "-y")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()
+		return cmd.Run()
 	case "arch":
-		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "nfctools")
+		cmd := exec.Command("sudo", "pacman", "-S", "--noconfirm", "libnfc")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		return cmd.Run()

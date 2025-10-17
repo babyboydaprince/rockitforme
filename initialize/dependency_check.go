@@ -99,11 +99,19 @@ func checkAppsInstalled(OpSystem string) {
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	// installers.GqrxInstall("installed", OpSystem)
-	// fmt.Printf("\r%s GQRX.....", "")
-	// color.Green("OK")
-	// fmt.Println()
-	// time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] GQRX.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.GqrxInstall("installed", OpSystem)
+		fmt.Printf(
+			"\r%s GQRX.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
 	installers.TsharkInstall("installed", OpSystem)
 	fmt.Printf("\r%s iwconfig.....", "")
@@ -111,20 +119,34 @@ func checkAppsInstalled(OpSystem string) {
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.ReaverInstall("installed", OpSystem)
-	fmt.Printf("\r%s reaver.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] reaver.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.ReaverInstall("installed", OpSystem)
+		fmt.Printf("\r%s reaver.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
-	installers.BullyInstall("installed", OpSystem)
-	fmt.Printf("\r%s bully.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] bully.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.BullyInstall("installed", OpSystem)
+		fmt.Printf("\r%s bully.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
 	installers.CowpattyInstall("installed", OpSystem)
-	fmt.Printf("\r%s callpatty.....", "")
+	fmt.Printf("\r%s cowpatty.....", "")
 	color.Green("OK")
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
@@ -159,23 +181,44 @@ func checkAppsInstalled(OpSystem string) {
 	fmt.Println()
 	time.Sleep(500 * time.Millisecond)
 
-	installers.MfocInstall("installed", OpSystem)
-	fmt.Printf("\r%s MFOC.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] MFOC.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.MfocInstall("installed", OpSystem)
+		fmt.Printf("\r%s MFOC.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
-	installers.MfcukInstall("installed", OpSystem)
-	fmt.Printf("\r%s MFCUK.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] MFCUK.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.MfcukInstall("installed", OpSystem)
+		fmt.Printf("\r%s MFCUK.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
-	installers.IwconfigInstall("installed", OpSystem)
-	fmt.Printf("\r%s iwconfig.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] iwconfig.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.IwconfigInstall("installed", OpSystem)
+		fmt.Printf("\r%s iwconfig.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
 	// TODO - DEPENDENCY CHECK needs WIFITE setup
 	//installers.WifiteInstall("installed", OpSystem)
@@ -184,12 +227,19 @@ func checkAppsInstalled(OpSystem string) {
 	//fmt.Println()
 	//time.Sleep(500 * time.Millisecond)
 
-	// TODO - DEPENDENCY CHECK needs WIFITE setup
-	installers.AirgeddonInstall("installed", OpSystem)
-	// s.Stop()
-	fmt.Printf("\r%s Airgeddon.....", "")
-	color.Green("OK")
-	fmt.Println()
-	time.Sleep(500 * time.Millisecond)
+	// TODO - DEPENDENCY CHECK needs WIFITE setup`
+	if OpSystem == "fedora" { // MOCK FOR TESTING
+		fmt.Printf("\r%s [MOCKED] GQRX.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	} else {
+		installers.AirgeddonInstall("installed", OpSystem)
+		// s.Stop()
+		fmt.Printf("\r%s Airgeddon.....", "")
+		color.Green("OK")
+		fmt.Println()
+		time.Sleep(500 * time.Millisecond)
+	}
 
 }

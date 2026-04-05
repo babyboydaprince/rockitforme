@@ -4,7 +4,6 @@ go 1.22.2
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/briandowns/spinner v1.23.2
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 	github.com/fatih/color v1.18.0
 	github.com/google/gopacket v1.1.19
